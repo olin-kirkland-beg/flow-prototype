@@ -1,0 +1,34 @@
+// Colors & Shadows
+:root {
+    // Colors
+    --color-primary: #7950f2; // Used for primary actions, buttons, highlights
+    --color-primary-alt: #6741d9; // Used for primary actions, buttons, highlights
+    --color-background: #f8f9fa; // Used for background
+    --color-background-alt: #f1f3f5; // Used for background
+    --color-surface: #e9ecef; // For cards, modals, or containers on top of background
+    --color-surface-alt: #dee2e6; // For cards, modals, or containers on top of surface
+    --color-on-surface: #3b3b3b; // For cards, modals, or containers on top of surface
+    --color-on-surface-alt: #585858; // For cards, modals, or containers on top of surface
+    --color-danger: #e74c3c; // Used for error states, alerts
+    --color-danger-alt: #c0392b; // Used for error states, alerts
+
+    // Rainbow
+    --color-red: #bbb0b0;
+    --color-orange: #ff922b;
+    --color-yellow: #ffd43b;
+    --color-green: #51cf66;
+    --color-teal: #20c997;
+    --color-blue: #339af0;
+    --color-indigo: #5c7cfa;
+    --color-purple: #7950f2;
+    --color-pink: #e9417c;
+    --color-grey: #adb5bd;
+    --color-light-grey: #ced4da;
+    --color-black: #131313;
+
+    // Shadows
+    --shadow-sm: rgba(0, 0, 0, 0.1) 0px 2px 3px;
+    --shadow-md: rgba(0, 0, 0, 0.4) 0px 2px 12px;
+    --shadow-lg: rgba(0, 0, 0, 0.4) 0px 10px 15px;
+    --shadow-text: rgba(0, 0, 0, 0.4) 2px 2px 2px;
+}
