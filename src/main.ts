@@ -5,6 +5,7 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import Card from './components/ui/Card.vue';
 import InputGroup from './components/ui/InputGroup.vue';
+import Link from './components/ui/Link.vue';
 import List from './components/ui/List.vue';
 import Panel from './components/ui/Panel.vue';
 import i18n from './i18n/locale';
@@ -25,6 +26,7 @@ app.component('Panel', Panel);
 app.component('Card', Card);
 app.component('List', List);
 app.component('InputGroup', InputGroup);
+app.component('Link', Link);
 
 // Load projects from localStorage
 const projectsStore = useProjectsStore();

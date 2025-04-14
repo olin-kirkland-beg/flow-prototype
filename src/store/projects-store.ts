@@ -89,6 +89,8 @@ export const useProjectsStore = defineStore('projects', () => {
         scene.dialogues = scene.dialogues.filter(
             (dialogue) => dialogue.id !== dialogueId
         );
+
+        cleanEdges(projectId, sceneId);
     }
 
     // Add an option to a dialogue
@@ -127,6 +129,8 @@ export const useProjectsStore = defineStore('projects', () => {
         dialogue.data.options = dialogue.data.options.filter(
             (option) => option.id !== optionId
         );
+
+        cleanEdges(projectId, sceneId);
     }
 
     // Add an edge
@@ -162,9 +166,43 @@ export const useProjectsStore = defineStore('projects', () => {
         scene.edges.push(edge);
     }
 
-    // Remove an edge
-    function removeEdge(edgeId: string): void {
-        // TODO
+    // Remove an edge (unlink an option)
+    function removeEdge(
+        projectId: string,
+        sceneId: string,
+        edgeId: string
+    ): void {
+        const project = getProject(projectId);
+        if (!project) return; // Project not found
+        const scene = project.scenes.find((s) => s.id === sceneId);
+        if (!scene) return; // Scene not found
+        scene.edges = scene.edges.filter((edge) => edge.id !== edgeId);
+
+        cleanEdges(projectId, sceneId);
+    }
+
+    function cleanEdges(projectId: string, sceneId: string): void {
+        const project = getProject(projectId);
+        if (!project) return; // Project not found
+        const scene = project.scenes.find((s) => s.id === sceneId);
+        if (!scene) return; // Scene not found
+        // Ensure there are no edges that reference non-existent nodes or options
+        scene.edges = scene.edges.filter((edge) => {
+            const sourceDialogue = scene.dialogues.find(
+                (dialogue) => dialogue.id === edge.source
+            );
+            if (!sourceDialogue) return false; // Source dialogue not found
+
+            const targetDialogue = scene.dialogues.find(
+                (dialogue) => dialogue.id === edge.target
+            );
+            if (!targetDialogue) return false; // Target dialogue not found
+
+            const targetOption = sourceDialogue?.data.options.find(
+                (option) => option.id === edge.target
+            );
+            return !!targetOption; // Target option found
+        });
     }
 
     return {

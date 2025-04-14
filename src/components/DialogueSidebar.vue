@@ -29,21 +29,23 @@
 
             <!-- List of options -->
             <List class="options">
-                <li v-if="selectedDialogue?.data.options.length === 0">
+                <li v-if="options.length === 0">
                     <em>No options yet.</em>
                 </li>
-                <li
-                    v-for="option in selectedDialogue?.data.options"
-                    :key="option.id"
-                >
+                <li v-for="option in options" :key="option.id">
                     <div class="flex">
                         <span>
                             <em>{{ option.id }}</em>
                         </span>
                     </div>
                     <div class="connected-node">
-                        <span v-if="option.nextDialogueId">
-                            <em>{{ option.nextDialogueId }}</em>
+                        <span v-if="option.edge">
+                            <em
+                                >Connected to
+                                <Link @click="console.log(event)">{{
+                                    option.edge.target
+                                }}</Link></em
+                            >
                         </span>
                         <span v-else>Not connected</span>
                     </div>
@@ -54,7 +56,7 @@
                         </Button>
                         <Button
                             @click.stop="onClickUnlinkOption(option.id)"
-                            :disabled="!option.nextDialogueId"
+                            :disabled="!option.edge"
                         >
                             <i class="fas fa-unlink"></i>
                             <span>Unlink</span>
@@ -81,6 +83,7 @@ import Scene from '@/scene';
 import { useProjectsStore } from '@/store/projects-store';
 import { v4 as uuid } from 'uuid';
 import InputGroup from './ui/InputGroup.vue';
+import { computed } from 'vue';
 
 const props = defineProps<{
     project: Project;
@@ -94,6 +97,24 @@ const emit = defineEmits<{
 }>();
 
 const projectStore = useProjectsStore();
+
+const options = computed(() => {
+    const optionsWithEdges = [];
+    // optionsWithEdges contains the options from props.selectedDialogue.data.options
+    // and incorporates the associated outgoing edges
+    props.selectedDialogue?.data.options.forEach((option) => {
+        const optionWithEdge = { option: option, edge: null };
+        props.selectedScene.edges.forEach((edge) => {
+            // If the edge's source is the current optionId
+            console.log(edge.sourceHandle, option.id);
+            if (edge.sourceHandle === option.id) optionWithEdge.edge = edge;
+        });
+
+        optionsWithEdges.push(optionWithEdge);
+    });
+
+    return optionsWithEdges;
+});
 
 function onClickCloseDialogue() {
     emit('deselectDialogue');
@@ -109,7 +130,6 @@ function onClickAddOption() {
     const newOption: DialogueOption = {
         id: uuid(),
         label: 'New Option',
-        nextDialogueId: null,
         condition: null
     };
 

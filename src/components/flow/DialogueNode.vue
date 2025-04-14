@@ -13,7 +13,6 @@
             :position="Position.Left"
             :type="'target'"
             :class="{
-                connected: props.data.prevDialogueIds.length > 0,
                 seeking:
                     !!props.seekingNodeId && props.seekingNodeId !== props.id
             }"
@@ -25,9 +24,6 @@
             </div>
             <div class="node-content__body">
                 <p>{{ props.data.label }}</p>
-                <div class="flex">
-                    <p>({{ props.data.prevDialogueIds.length }})</p>
-                </div>
             </div>
         </div>
 
@@ -40,7 +36,6 @@
                     <Handle
                         :id="option.id"
                         class="handle handle--outgoing"
-                        :class="{ connected: option.nextDialogueId }"
                         :position="Position.Right"
                         :type="'source'"
                     />
