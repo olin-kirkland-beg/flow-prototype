@@ -11,23 +11,15 @@
             <div class="sidebar__header">
                 <h2>{{ project.name }}</h2>
             </div>
-            <InputGroup v-model="project.name" placeholder="Project name">
-                <span>Project Name</span>
-            </InputGroup>
-            <InputGroup
-                v-model="project.description"
-                placeholder="Project description"
-            >
-                <span>Description</span>
-            </InputGroup>
+            <p v-if="project.description">{{ project.description }}</p>
+            <p v-else><em> No description yet. </em></p>
             <div class="flex full-width">
-                <Button @click="onClickAddScene" full-width primary>
+                <Button @click="onClickAddScene" full-width>
                     <i class="fas fa-plus"></i>
                     <span>Add Scene</span>
                 </Button>
-                <Button @click="onClickOpenProjectSettings" full-width>
+                <Button @click="onClickOpenProjectSettings" icon>
                     <i class="fas fa-cog"></i>
-                    <span>Settings</span>
                 </Button>
             </div>
             <List class="scenes">
@@ -53,27 +45,15 @@
             <div class="sidebar__header">
                 <h2>{{ selectedScene.name }}</h2>
             </div>
-            <InputGroup v-model="selectedScene.name" placeholder="Project name">
-                <span>Scene Name</span>
-            </InputGroup>
-            <InputGroup
-                v-model="selectedScene.description"
-                placeholder="Scene description"
-            >
-                <span>Description</span>
-            </InputGroup>
+            <p>{{ selectedScene.description }}</p>
             <div class="flex full-width">
                 <Button @click="onClickAddDialogue" full-width>
                     <i class="fas fa-plus"></i>
                     <span>Add State</span>
                 </Button>
-                <Button @click="onClickDeleteScene" full-width>
-                    <i class="fas fa-trash"></i>
-                    <span>Delete</span>
-                </Button>
-                <!-- <Button @click="onClickOpenSceneSettings" icon>
+                <Button @click="onClickOpenSceneSettings" icon>
                     <i class="fas fa-cog"></i>
-                </Button> -->
+                </Button>
             </div>
             <List class="dialogue">
                 <li v-if="selectedScene?.dialogues.length === 0">
@@ -127,8 +107,6 @@
 </template>
 
 <script setup lang="ts">
-import { t } from '@/i18n/locale';
-import ConfirmModal from '@/components/modals/templates/ConfirmModal.vue';
 import ModalController from '@/controllers/modal-controller';
 import Dialogue from '@/dialogue';
 import Project from '@/project';
@@ -160,26 +138,6 @@ function onClickOpenSceneSettings() {
     ModalController.open(SceneSettingsModal, {
         project: props.project,
         scene: props.selectedScene
-    });
-}
-
-function onClickDeleteScene() {
-    if (!props.selectedScene) return;
-    ModalController.open(ConfirmModal, {
-        title: t('UI.Modals.Delete-scene.title'),
-        message: t('UI.Modals.Delete-scene.message'),
-        confirmText: t('UI.Modals.Delete-scene.Controls.confirm'),
-        cancelText: t('UI.Modals.Delete-scene.Controls.cancel'),
-        isConfirmButtonDanger: true,
-        onConfirm: () => {
-            useProjectsStore().removeScene(
-                props.project.id,
-                props.selectedScene.id
-            );
-            // Deselect the scene
-            emit('selectScene', null);
-            ModalController.close();
-        }
     });
 }
 

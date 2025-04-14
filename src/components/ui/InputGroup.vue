@@ -41,7 +41,6 @@ const onInput = (event: Event) => {
 
     > .prepend {
         display: flex;
-        flex-shrink: 0;
         gap: 0.8rem;
         align-items: center;
         padding: 0 1.2rem;
