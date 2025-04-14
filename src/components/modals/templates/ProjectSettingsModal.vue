@@ -9,18 +9,6 @@
             <div class="project-settings">
                 <section>
                     <p><strong>Project ID:</strong> {{ project.id }}</p>
-                    <InputGroup
-                        v-model="project.name"
-                        placeholder="Project name"
-                    >
-                        <span>Name</span>
-                    </InputGroup>
-                    <InputGroup
-                        v-model="project.description"
-                        placeholder="Project description"
-                    >
-                        <span>Description</span>
-                    </InputGroup>
                     <div class="flex">
                         <Badge
                             color="var(--color-surface-alt)"

@@ -9,15 +9,6 @@
             <div class="scene-settings">
                 <section>
                     <p><strong>Scene ID:</strong> {{ scene.id }}</p>
-                    <InputGroup v-model="scene.name" placeholder="Project name">
-                        <span>Name</span>
-                    </InputGroup>
-                    <InputGroup
-                        v-model="scene.description"
-                        placeholder="Scene description"
-                    >
-                        <span>Description</span>
-                    </InputGroup>
                 </section>
 
                 <Button @click="onClickDeleteScene" danger>
