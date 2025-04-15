@@ -33,24 +33,15 @@
                     <em>No options yet.</em>
                 </li>
                 <li v-for="option in options" :key="option.id">
-                    <div class="flex">
-                        <span>
-                            <em>{{ option.id }}</em>
-                        </span>
-                    </div>
+                    <em class="ellipsis">{{ option.id }}</em>
                     <div class="connected-node">
                         <span v-if="option.edge">
-                            <em
-                                >Connected to
-                                <Link
-                                    @click="
-                                        emit(
-                                            'selectDialogue',
-                                            option.edge.target
-                                        )
-                                    "
-                                    >{{ option.edge.target }}</Link
-                                ></em
+                            Connected to
+                            <Link
+                                @click="
+                                    emit('selectDialogue', option.edge.target)
+                                "
+                                >{{ option.edge.target }}</Link
                             >
                         </span>
                         <span v-else>Not connected</span>
@@ -71,7 +62,7 @@
                 </li>
             </List>
 
-            <pre>{{ selectedDialogue }}</pre>
+            <!-- <pre>{{ selectedDialogue }}</pre> -->
 
             <!-- Remove Dialogue button -->
             <Button @click="onClickRemoveSelectedDialogue" full-width>
@@ -165,7 +156,8 @@ function onClickRemoveOption(id: string) {
 function onClickUnlinkOption(optionId: string) {
     if (!props.selectedDialogue) return;
     // Determine the edge id
-    const edgeId = options.value.find((option) => option.id === optionId)?.edge?.id;
+    const edgeId = options.value.find((option) => option.id === optionId)?.edge
+        ?.id;
     if (!edgeId) return;
     // Remove the edge from the scene
     projectStore.removeEdge(props.project.id, props.selectedScene?.id, edgeId);
@@ -212,13 +204,14 @@ section {
 
 :deep(ul.options) {
     min-height: 40rem;
+    flex: 1;
 
     > li {
         width: 100%;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        gap: 0.4rem;
+        gap: 0.8rem;
         cursor: unset;
 
         > span {

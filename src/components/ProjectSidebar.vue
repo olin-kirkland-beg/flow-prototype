@@ -74,7 +74,7 @@
                 </li>
             </List>
         </section>
-        <section class="sidebar__edges" v-if="selectedScene">
+        <!-- <section class="sidebar__edges" v-if="selectedScene">
             <h2>Edges</h2>
             <List class="edges">
                 <li v-if="selectedScene.edges?.length === 0">
@@ -84,7 +84,7 @@
                     <pre>{{ edge.id }}</pre>
                 </li></List
             >
-        </section>
+        </section> -->
     </Panel>
 </template>
 

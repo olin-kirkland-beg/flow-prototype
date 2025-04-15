@@ -83,3 +83,10 @@ i {
     touch-action: manipulation; // Prevent double-tap zoom on mobile devices
     -webkit-tap-highlight-color: transparent; // Prevent highlight on tap
 }
+
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
