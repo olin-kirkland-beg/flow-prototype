@@ -42,9 +42,15 @@
                         <span v-if="option.edge">
                             <em
                                 >Connected to
-                                <Link @click="console.log(event)">{{
-                                    option.edge.target
-                                }}</Link></em
+                                <Link
+                                    @click="
+                                        emit(
+                                            'selectDialogue',
+                                            option.edge.target
+                                        )
+                                    "
+                                    >{{ option.edge.target }}</Link
+                                ></em
                             >
                         </span>
                         <span v-else>Not connected</span>
@@ -81,9 +87,10 @@ import Dialogue, { DialogueOption } from '@/dialogue';
 import Project from '@/project';
 import Scene from '@/scene';
 import { useProjectsStore } from '@/store/projects-store';
+import { Edge } from '@vue-flow/core';
 import { v4 as uuid } from 'uuid';
-import InputGroup from './ui/InputGroup.vue';
 import { computed } from 'vue';
+import InputGroup from './ui/InputGroup.vue';
 
 const props = defineProps<{
     project: Project;
@@ -93,20 +100,24 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: 'panToDialogue', id: string): void;
+    (e: 'selectDialogue', id: string): void;
     (e: 'deselectDialogue'): void;
 }>();
 
 const projectStore = useProjectsStore();
 
 const options = computed(() => {
-    const optionsWithEdges = [];
+    const optionsWithEdges: (DialogueOption & { edge: Edge | null })[] = [];
     // optionsWithEdges contains the options from props.selectedDialogue.data.options
     // and incorporates the associated outgoing edges
     props.selectedDialogue?.data.options.forEach((option) => {
-        const optionWithEdge = { option: option, edge: null };
+        const optionWithEdge: DialogueOption & { edge: Edge | null } = {
+            ...option,
+            edge: null
+        };
+        // Find the edge associated with this option
+        // and add it to the optionWithEdge object
         props.selectedScene.edges.forEach((edge) => {
-            // If the edge's source is the current optionId
-            console.log(edge.sourceHandle, option.id);
             if (edge.sourceHandle === option.id) optionWithEdge.edge = edge;
         });
 

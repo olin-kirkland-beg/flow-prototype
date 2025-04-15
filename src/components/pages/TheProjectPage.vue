@@ -37,7 +37,7 @@
             :selectedScene="selectedScene"
             :selectedDialogue="selectedDialogue"
             @selectScene="selectScene"
-            @selectDialogue="selectDialogue"
+            @selectDialogue="selectDialogueById"
         />
 
         <DialogueSidebar
@@ -45,6 +45,7 @@
             :project="project"
             :selectedScene="selectedScene"
             :selectedDialogue="selectedDialogue"
+            @selectDialogue="selectDialogueById"
             @deselectDialogue="selectedDialogue = null"
             @panToDialogue="panToNode"
         />
@@ -209,6 +210,17 @@ function onNodesChange(changes: NodeChange[]) {
 // Select a scene in the project
 function selectScene(scene: Scene) {
     selectedScene.value = scene;
+}
+
+function selectDialogueById(id: string) {
+    if (!selectedScene.value) return;
+    const dialogue = projectsStore.getDialogue(
+        project.value!.id,
+        selectedScene.value.id,
+        id
+    );
+    if (!dialogue) return;
+    selectDialogue(dialogue);
 }
 
 // Select a dialogue in the project

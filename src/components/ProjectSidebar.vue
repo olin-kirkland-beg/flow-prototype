@@ -65,18 +65,11 @@
                     :class="{
                         'is-selected': selectedDialogue?.id === dialogue.id
                     }"
-                    @click="onClickSelectDialogue(dialogue)"
+                    @click="onClickSelectDialogue(dialogue.id)"
                 >
                     <i class="fas fa-sticky-note"></i>
                     <div class="full-width flex spread">
                         <em>{{ dialogue.id.substring(0, 8) }}</em>
-                        <span class="muted">
-                            {{
-                                dialogue.data.options.filter(
-                                    (option) => option.nextDialogueId
-                                ).length
-                            }}/{{ dialogue.data.options.length }}</span
-                        >
                     </div>
                 </li>
             </List>
@@ -84,7 +77,7 @@
         <section class="sidebar__edges" v-if="selectedScene">
             <h2>Edges</h2>
             <List class="edges">
-                <li v-if="selectedScene.edges.length === 0">
+                <li v-if="selectedScene.edges?.length === 0">
                     <em>No edges yet.</em>
                 </li>
                 <li v-for="edge in selectedScene.edges" :key="edge.id">
@@ -125,7 +118,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: 'selectScene', scene: Scene): void;
-    (e: 'selectDialogue', dialogue: Dialogue): void;
+    (e: 'selectDialogue', id: string): void;
 }>();
 
 const projectsStore = useProjectsStore();
@@ -160,8 +153,8 @@ function onClickSelectScene(scene: Scene) {
     emit('selectScene', scene);
 }
 
-function onClickSelectDialogue(dialogue: Dialogue) {
-    emit('selectDialogue', dialogue);
+function onClickSelectDialogue(id:string) {
+    emit('selectDialogue', id);
 }
 </script>
 

@@ -45,6 +45,13 @@ export const useProjectsStore = defineStore('projects', () => {
         projects.value = projects.value.filter((project) => project.id !== id);
     }
 
+    // Get a scene by ID
+    function getScene(projectId: string, sceneId: string): Scene | undefined {
+        const project = getProject(projectId);
+        if (!project) return undefined; // Project not found
+        return project.scenes.find((scene) => scene.id === sceneId);
+    }
+
     // Add a scene to a project
     function addScene(projectId: string, scene: Scene): void {
         const project = getProject(projectId);
@@ -57,6 +64,19 @@ export const useProjectsStore = defineStore('projects', () => {
         const project = getProject(projectId);
         if (!project) return; // Project not found
         project.scenes = project.scenes.filter((scene) => scene.id !== sceneId);
+    }
+
+    // Get a dialogue by ID
+    function getDialogue(
+        projectId: string,
+        sceneId: string,
+        dialogueId: string
+    ): Dialogue | undefined {
+        const project = getProject(projectId);
+        if (!project) return undefined; // Project not found
+        const scene = project.scenes.find((s) => s.id === sceneId);
+        if (!scene) return undefined; // Scene not found
+        return scene.dialogues.find((dialogue) => dialogue.id === dialogueId);
     }
 
     // Add a dialogue to a scene
@@ -212,8 +232,10 @@ export const useProjectsStore = defineStore('projects', () => {
         getProject,
         addProject,
         removeProject,
+        getScene,
         addScene,
         removeScene,
+        getDialogue,
         addDialogue,
         removeDialogue,
         addOption,

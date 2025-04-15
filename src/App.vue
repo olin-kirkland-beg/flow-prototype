@@ -12,7 +12,6 @@
 <script setup lang="ts">
 import TheModalContainer from '@/components/modals/TheModalContainer.vue';
 import { initializeI18nInstance } from './i18n/locale';
-import { Transition } from 'vue';
 
 initializeI18nInstance();
 </script>
