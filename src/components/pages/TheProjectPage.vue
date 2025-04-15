@@ -281,7 +281,7 @@ function onConnect(params: Edge | Connection) {
     const sourceOptionId = edge.sourceHandle;
     const targetNodeId = edge.target;
     if (!sourceOptionId) return;
-    
+
     useProjectsStore().addEdge(
         project.value!.id,
         selectedScene.value!.id,
