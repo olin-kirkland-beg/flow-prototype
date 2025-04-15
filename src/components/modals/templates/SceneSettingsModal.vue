@@ -2,7 +2,7 @@
     <ModalFrame>
         <template v-slot:header>
             <ModalHeader closeButton>
-                <h2>Scene Settings</h2>
+                <h2>Flow Settings</h2>
             </ModalHeader>
         </template>
         <template v-slot:content>

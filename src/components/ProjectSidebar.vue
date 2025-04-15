@@ -10,18 +10,16 @@
             </div>
             <div class="sidebar__header">
                 <h2>{{ project.name }}</h2>
-            </div>
-            <p v-if="project.description">{{ project.description }}</p>
-            <p v-else><em> No description yet. </em></p>
-            <div class="flex full-width">
-                <Button @click="onClickAddScene" full-width>
-                    <i class="fas fa-plus"></i>
-                    <span>Add Scene</span>
-                </Button>
                 <Button @click="onClickOpenProjectSettings" icon>
                     <i class="fas fa-cog"></i>
                 </Button>
             </div>
+            <p v-if="project.description">{{ project.description }}</p>
+            <p v-else><em>No description yet.</em></p>
+            <Button @click="onClickAddScene" full-width>
+                <i class="fas fa-plus"></i>
+                <span>Add Flow</span>
+            </Button>
             <List class="scenes">
                 <li v-if="project.scenes.length === 0">
                     <em>No scenes yet.</em>
@@ -44,17 +42,15 @@
         <section class="sidebar__scene" v-if="selectedScene">
             <div class="sidebar__header">
                 <h2>{{ selectedScene.name }}</h2>
-            </div>
-            <p>{{ selectedScene.description }}</p>
-            <div class="flex full-width">
-                <Button @click="onClickAddDialogue" full-width>
-                    <i class="fas fa-plus"></i>
-                    <span>Add State</span>
-                </Button>
                 <Button @click="onClickOpenSceneSettings" icon>
                     <i class="fas fa-cog"></i>
                 </Button>
             </div>
+            <p>{{ selectedScene.description }}</p>
+            <Button @click="onClickAddDialogue" full-width>
+                <i class="fas fa-plus"></i>
+                <span>Add State</span>
+            </Button>
             <List class="dialogue">
                 <li v-if="selectedScene?.dialogues.length === 0">
                     <em>No dialogues yet.</em>
@@ -157,13 +153,21 @@ function onClickSelectDialogue(id: string) {
 
 .sidebar__header {
     width: 100%;
-    border-bottom: 1px solid var(--color-surface-alt);
+    // border-bottom: 1px solid var(--color-surface-alt);
+    // Background is a gradient light gray to transparent top to down
+    background: linear-gradient(
+        to bottom,
+        var(--color-surface) 0%,
+        transparent 100%
+    );
+
+    padding-left: 0.8rem;
+    border-radius: 5px;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
-    // Don't shrink
     flex-shrink: 0;
-    padding-bottom: 0.8rem;
 }
 
 section {
