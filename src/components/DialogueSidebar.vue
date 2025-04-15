@@ -154,8 +154,6 @@ function onClickAddOption() {
 
 function onClickRemoveOption(id: string) {
     if (!props.selectedDialogue) return;
-    // TODO: Remove edge
-
     projectStore.removeOption(
         props.project.id,
         props.selectedScene?.id,
@@ -164,9 +162,13 @@ function onClickRemoveOption(id: string) {
     );
 }
 
-function onClickUnlinkOption(id: string) {
+function onClickUnlinkOption(optionId: string) {
     if (!props.selectedDialogue) return;
-    // TODO: Remove edge
+    // Determine the edge id
+    const edgeId = options.value.find((option) => option.id === optionId)?.edge?.id;
+    if (!edgeId) return;
+    // Remove the edge from the scene
+    projectStore.removeEdge(props.project.id, props.selectedScene?.id, edgeId);
 }
 
 function onClickRemoveSelectedDialogue() {

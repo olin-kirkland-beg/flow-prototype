@@ -4,6 +4,7 @@ import Scene from '@/scene';
 import { Edge, MarkerType } from '@vue-flow/core';
 import { defineStore } from 'pinia';
 import { ref, watch } from 'vue';
+import { v4 as uuid } from 'uuid';
 
 export const useProjectsStore = defineStore('projects', () => {
     const projects = ref<Project[]>([]);
@@ -162,7 +163,7 @@ export const useProjectsStore = defineStore('projects', () => {
         targetId: string // Not a handle
     ): void {
         const edge: Edge = {
-            id: `${sourceHandleId}__${targetId}`,
+            id: uuid(),
             source: sourceId,
             sourceHandle: sourceHandleId,
             target: targetId,
@@ -192,16 +193,29 @@ export const useProjectsStore = defineStore('projects', () => {
         sceneId: string,
         edgeId: string
     ): void {
+        console.log('Removing edge:', edgeId);
+
         const project = getProject(projectId);
         if (!project) return; // Project not found
         const scene = project.scenes.find((s) => s.id === sceneId);
         if (!scene) return; // Scene not found
+
+        console.log(
+            'Edges:',
+            scene.edges.map((edge) => edge.id)
+        );
+
         scene.edges = scene.edges.filter((edge) => edge.id !== edgeId);
+        console.log(
+            'Edges after removal:',
+            scene.edges.map((edge) => edge.id)
+        );
 
         cleanEdges(projectId, sceneId);
     }
 
     function cleanEdges(projectId: string, sceneId: string): void {
+        return;
         const project = getProject(projectId);
         if (!project) return; // Project not found
         const scene = project.scenes.find((s) => s.id === sceneId);

@@ -81,18 +81,7 @@
                     <em>No edges yet.</em>
                 </li>
                 <li v-for="edge in selectedScene.edges" :key="edge.id">
-                    <p>source</p>
-                    <Badge color="var(--color-surface-alt)">
-                        <span>{{ edge.source }}</span></Badge
-                    >
-                    <p>sourceHandle</p>
-                    <Badge color="var(--color-surface-alt)">
-                        <span>{{ edge.sourceHandle }}</span></Badge
-                    >
-                    <p>target</p>
-                    <Badge color="var(--color-surface-alt)">
-                        <span>{{ edge.target }}</span></Badge
-                    >
+                    <pre>{{ edge.id }}</pre>
                 </li></List
             >
         </section>
@@ -153,7 +142,7 @@ function onClickSelectScene(scene: Scene) {
     emit('selectScene', scene);
 }
 
-function onClickSelectDialogue(id:string) {
+function onClickSelectDialogue(id: string) {
     emit('selectDialogue', id);
 }
 </script>
