@@ -1,10 +1,6 @@
-import ConfirmModal from '@/components/modals/templates/ConfirmModal.vue';
 import TheHomePage from '@/components/pages/TheHomePage.vue';
 import TheLostPage from '@/components/pages/TheLostPage.vue';
 import TheProjectPage from '@/components/pages/TheProjectPage.vue';
-import ModalController from '@/controllers/modal-controller';
-import { t } from '@/i18n/locale';
-import { startTracking, stopTracking } from '@/tracker';
 import { RouterOptions, createRouter, createWebHistory } from 'vue-router';
 
 export enum PageName {
