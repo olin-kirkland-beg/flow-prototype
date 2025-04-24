@@ -49,10 +49,16 @@
                     </div>
                 </section>
 
-                <Button @click="onClickDeleteProject" danger>
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <span>Delete Project</span>
-                </Button>
+                <div class="options">
+                    <Button @click="onClickDeleteProject" danger>
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Delete Project</span>
+                    </Button>
+                    <Button @click="ModalController.close()">
+                        <i class="fas fa-save"></i>
+                        <span>Save</span>
+                    </Button>
+                </div>
             </div>
         </template>
     </ModalFrame>
@@ -114,6 +120,14 @@ section {
     display: flex;
     width: 40rem;
     flex-direction: column;
+    gap: 0.8rem;
+}
+
+.options {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
     gap: 0.8rem;
 }
 </style>
