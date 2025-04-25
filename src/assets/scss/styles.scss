@@ -90,3 +90,7 @@ i {
     white-space: nowrap;
     max-width: 100%;
 }
+
+:focus {
+    outline: none;
+}

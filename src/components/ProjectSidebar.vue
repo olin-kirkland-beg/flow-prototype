@@ -93,7 +93,6 @@ import Scene from '@/scene';
 import { useProjectsStore } from '@/store/projects-store';
 import ProjectSettingsModal from './modals/templates/ProjectSettingsModal.vue';
 import SceneSettingsModal from './modals/templates/SceneSettingsModal.vue';
-import Badge from './ui/Badge.vue';
 
 const props = defineProps<{
     project: Project;

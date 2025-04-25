@@ -27,7 +27,7 @@ function onClickBackground() {
 const queue: { modal: any; modalConfig: any }[] = [];
 
 ModalController.getInstance().addEventListener(({ modal, modalConfig }) => {
-    (document.activeElement as HTMLElement)?.blur();
+    // (document.activeElement as HTMLElement)?.blur();
 
     // If no modal was passed, close the current one
     if (!modal) {
@@ -57,13 +57,13 @@ ModalController.getInstance().addEventListener(({ modal, modalConfig }) => {
         if (isModalAlreadyInQueue) return;
 
         // Add the modal to the queue
-        console.log('Queueing modal', JSON.stringify(modalConfig));
+        // console.log('Queueing modal', JSON.stringify(modalConfig));
         queue.push({ modal, modalConfig });
         return;
     }
 
     if (modal) {
-        console.log('Opening modal', JSON.stringify(modalConfig));
+        // console.log('Opening modal', JSON.stringify(modalConfig));
         currentModal.value = { ...modal! } as any;
         currentModalConfig.value = { ...modalConfig };
     }
@@ -82,12 +82,6 @@ ModalController.getInstance().addEventListener(({ modal, modalConfig }) => {
         const modalChildren = [...modalHeaderChildren, ...modalContentChildren];
         // @ts-ignore
         window.modalChildren = modalChildren;
-
-        // Pick the first element that is an input and focus it
-        const firstInput = modalEl.querySelector(
-            'input:not(.disabled):not(.ignore-initial-focus)'
-        );
-        if (firstInput) firstInput.focus();
     });
 });
 </script>

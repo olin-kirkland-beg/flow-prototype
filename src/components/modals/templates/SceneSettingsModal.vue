@@ -20,16 +20,30 @@
                     </InputGroup>
                 </section>
 
-                <div class="options">
-                    <Button @click="onClickDeleteScene" danger>
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <span>Delete Scene</span>
-                    </Button>
-                    <Button @click="ModalController.close()">
-                        <i class="fas fa-save"></i>
-                        <span>Save</span>
-                    </Button>
-                </div>
+                <section>
+                    <Card>
+                        <div class="flex spread full-width">
+                            <div>
+                                <h3>Delete Project</h3>
+                                <p>Permanently delete this project.</p>
+                            </div>
+                            <Button
+                                @click="onClickDeleteScene"
+                                danger
+                                @mouseover="
+                                    TooltipController.open(InfoTooltip, {
+                                        html: 'All project data will be <em>lost!</em>',
+                                        target: $event.currentTarget,
+                                        position: 'bottom'
+                                    })
+                                "
+                            >
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span>Delete Project</span>
+                            </Button>
+                        </div>
+                    </Card>
+                </section>
             </div>
         </template>
     </ModalFrame>
@@ -38,10 +52,11 @@
 <script setup lang="ts">
 import ModalFrame from '@/components/modals/ModalFrame.vue';
 import ModalHeader from '@/components/modals/ModalHeader.vue';
-import Badge from '@/components/ui/Badge.vue';
+import InfoTooltip from '@/components/tooltips/templates/InfoTooltip.vue';
 import Button from '@/components/ui/Button.vue';
 import InputGroup from '@/components/ui/InputGroup.vue';
 import ModalController from '@/controllers/modal-controller';
+import TooltipController from '@/controllers/tooltip-controller';
 import { t } from '@/i18n/locale';
 import Project from '@/project';
 import Scene from '@/scene';

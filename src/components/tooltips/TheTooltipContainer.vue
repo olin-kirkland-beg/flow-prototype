@@ -22,8 +22,6 @@ const currentTooltipConfig = shallowRef<any | null>(null);
 
 TooltipController.getInstance().addEventListener(
     ({ tooltip, tooltipConfig }) => {
-        (document.activeElement as HTMLElement)?.blur();
-
         // If no tooltip was passed, close the current one
         if (!tooltip) {
             currentTooltip.value = null;

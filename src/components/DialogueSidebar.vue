@@ -4,7 +4,7 @@
         <Panel class="sidebar sidebar--right" v-if="selectedDialogue">
             <div class="sidebar__header">
                 <h2>State</h2>
-                <div class="f">
+                <div>
                     <Button @click="onClickPanToDialogue" icon>
                         <i class="fas fa-crosshairs"></i>
                     </Button>

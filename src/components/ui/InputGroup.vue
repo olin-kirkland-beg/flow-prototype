@@ -39,6 +39,13 @@ const onInput = (event: Event) => {
     background-color: var(--color-background);
     border: 1px solid var(--color-surface-alt);
 
+    outline: none;
+
+    &:focus-within {
+        outline: 2px solid var(--color-orange);
+        outline-offset: 0.2rem;
+    }
+
     > .prepend {
         display: flex;
         gap: 0.8rem;

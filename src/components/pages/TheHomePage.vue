@@ -16,52 +16,6 @@
                     <span>Load Project</span>
                 </Button>
             </div>
-            <div class="flex">
-                <!-- Top -->
-                <Button
-                    @mouseover="
-                        TooltipController.open(InfoTooltip, {
-                            html: 'Tooltips are a great way to provide additional information to users.',
-                            target: $event.currentTarget,
-                            position: 'top'
-                        })
-                    "
-                    >Top</Button
-                >
-                <!-- Right -->
-                <Button
-                    @mouseover="
-                        TooltipController.open(InfoTooltip, {
-                            html: 'Tooltips are a great way to provide additional information to users.',
-                            target: $event.currentTarget,
-                            position: 'right'
-                        })
-                    "
-                    >Right</Button
-                >
-                <!-- Bottom -->
-                <Button
-                    @mouseover="
-                        TooltipController.open(InfoTooltip, {
-                            html: 'Tooltips are a great way to provide additional information to users.',
-                            target: $event.currentTarget,
-                            position: 'bottom'
-                        })
-                    "
-                    >Bottom</Button
-                >
-                <!-- Left -->
-                <Button
-                    @mouseover="
-                        TooltipController.open(InfoTooltip, {
-                            html: 'Tooltips are a great way to provide additional information to users.',
-                            target: $event.currentTarget,
-                            position: 'left'
-                        })
-                    "
-                    >Left</Button
-                >
-            </div>
         </Panel>
         <Panel v-if="displayedProjects.length > 0" class="projects-panel">
             <h2>Projects</h2>

@@ -31,6 +31,7 @@ const props = defineProps({
 button {
     position: relative;
     background-color: transparent;
+    flex-shrink: 0;
 }
 
 .full-width > .btn__content {
@@ -90,6 +91,7 @@ button {
             color: var(--color-background);
         }
     }
+
     .btn__shadow {
         background-color: var(--color-danger-alt);
     }
@@ -98,9 +100,13 @@ button {
 // Icon-only button
 .btn.btn--icon {
     .btn__content {
+        width: 3.2rem;
+        height: 3.2rem;
         background-color: transparent;
         border: none;
         top: 0;
+        justify-content: center;
+        align-items: center;
     }
     .btn__shadow {
         background-color: transparent;
@@ -109,8 +115,20 @@ button {
 
 // Disabled
 .btn--disabled {
-    opacity: 0.5;
     pointer-events: none;
     border: none;
+    opacity: 0.8;
+
+    .btn__content {
+        border: none;
+        background-color: none;
+        * {
+            opacity: 0.5;
+        }
+    }
+
+    .btn__shadow {
+        background-color: transparent;
+    }
 }
 </style>
