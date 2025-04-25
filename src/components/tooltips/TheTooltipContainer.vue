@@ -1,0 +1,158 @@
+<template>
+    <div class="tooltip-container">
+        <Transition
+            :name="`tooltip-transition--${currentTooltipConfig?.position}`"
+        >
+            <component
+                :is="currentTooltip"
+                v-bind="currentTooltipConfig"
+                ref="tooltipRef"
+            />
+        </Transition>
+    </div>
+</template>
+
+<script setup lang="ts">
+import TooltipController from '@/controllers/tooltip-controller';
+import { ComponentOptions, onMounted, ref, shallowRef } from 'vue';
+
+const tooltipRef = ref();
+const currentTooltip = shallowRef<ComponentOptions | null>(null);
+const currentTooltipConfig = shallowRef<any | null>(null);
+
+TooltipController.getInstance().addEventListener(
+    ({ tooltip, tooltipConfig }) => {
+        (document.activeElement as HTMLElement)?.blur();
+
+        // If no tooltip was passed, close the current one
+        if (!tooltip) {
+            currentTooltip.value = null;
+            return;
+        }
+
+        // Compare the current tooltip with the new one (and config)
+        const isTooltipAlreadyBeingShown =
+            JSON.stringify(currentTooltip.value) === JSON.stringify(tooltip) &&
+            JSON.stringify(currentTooltipConfig.value) ===
+                JSON.stringify(tooltipConfig);
+        if (isTooltipAlreadyBeingShown) return;
+
+        if (tooltip) {
+            currentTooltip.value = { ...tooltip! } as any;
+            currentTooltipConfig.value = { ...tooltipConfig };
+        }
+    }
+);
+
+onMounted(() => {
+    // Add a listener to the document to listen for mouseover events
+    // This is used to close the tooltip when the user mouses over an element that is not the tooltip itself or its target
+    document.addEventListener('mouseover', (event) => {
+        const eventTarget = event.target as HTMLElement;
+        const tooltipTarget = currentTooltipConfig.value?.target as HTMLElement;
+        const isChildOfTooltipTarget = tooltipTarget?.contains(eventTarget);
+        const isTooltip = tooltipRef.value?.$el?.contains(eventTarget);
+        const isTooltipTarget = tooltipTarget === eventTarget;
+
+        if (isChildOfTooltipTarget || isTooltip || isTooltipTarget) return;
+        TooltipController.close();
+    });
+});
+</script>
+
+<style scoped lang="scss">
+.tooltip-container {
+    position: absolute;
+    width: 100%;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    -webkit-overflow-scrolling: touch;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 99;
+    pointer-events: none;
+}
+
+.tooltip {
+    max-height: calc(100vh - 4rem);
+}
+
+.tooltip-transition--left-enter-active {
+    animation: slide-in-left 0.2s ease-out;
+}
+
+.tooltip-transition--right-enter-active {
+    animation: slide-in-right 0.2s ease-out;
+}
+
+.tooltip-transition--top-enter-active {
+    animation: slide-in-top 0.2s ease-out;
+}
+
+.tooltip-transition--bottom-enter-active {
+    animation: slide-in-bottom 0.2s ease-out;
+}
+
+@keyframes slide-in-top {
+    0% {
+        transform: translateY(10px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-in-bottom {
+    0% {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-in-left {
+    0% {
+        transform: translateX(10px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-in-right {
+    0% {
+        transform: translateX(-10px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+// Media queries
+@media (max-width: 768px) {
+    .tooltip {
+        min-width: 100%;
+        max-width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        min-height: 100vh; // Old browsers
+        min-height: 100dvh; // New browsers
+        min-height: -webkit-fill-available; // iOS
+        max-height: 100vh; // Old browsers
+        max-height: 100dvh; // New browsers
+        max-height: -webkit-fill-available; // iOS
+        animation: none;
+        border-radius: 0;
+    }
+}
+</style>

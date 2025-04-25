@@ -6,11 +6,13 @@
             </Transition>
         </router-view>
         <the-modal-container />
+        <the-tooltip-container />
     </div>
 </template>
 
 <script setup lang="ts">
 import TheModalContainer from '@/components/modals/TheModalContainer.vue';
+import TheTooltipContainer from '@/components/tooltips/TheTooltipContainer.vue';
 import { initializeI18nInstance } from './i18n/locale';
 
 initializeI18nInstance();

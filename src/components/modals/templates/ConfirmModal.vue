@@ -34,10 +34,10 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+import ModalController from '@/controllers/modal-controller';
 import ModalFrame from '@/components/modals/ModalFrame.vue';
 import ModalHeader from '@/components/modals/ModalHeader.vue';
-import ModalController from '@/controllers/modal-controller';
-import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
     title: string;
