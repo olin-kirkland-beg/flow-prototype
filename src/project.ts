@@ -18,7 +18,7 @@ export default class Project {
         this.scenes = [];
     }
 
-    static saveToFile(project: Project) {
+    static saveToFile(fileName: string, project: Project) {
         console.log('Saving project to file...');
         // Save the project to a file
         const projectData = JSON.stringify(project, null, 2);
@@ -26,7 +26,7 @@ export default class Project {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${project.name}.json`;
+        a.download = `${fileName}.json`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);

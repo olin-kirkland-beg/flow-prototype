@@ -59,7 +59,16 @@
                                     be copid or shared.
                                 </p>
                             </div>
-                            <Button @click="onClickSaveProjectToFile">
+                            <Button
+                                @click="onClickSaveProjectToFile"
+                                @mouseover="
+                                    TooltipController.open(InfoTooltip, {
+                                        html: `${toFileName(project.name)}.json`,
+                                        target: $event.currentTarget,
+                                        position: 'bottom'
+                                    })
+                                "
+                            >
                                 <i class="fas fa-file-download"></i>
                                 <span>Save to file</span>
                             </Button>
@@ -117,7 +126,11 @@ const props = defineProps<{
 }>();
 
 function onClickSaveProjectToFile() {
-    Project.saveToFile(props.project);
+    Project.saveToFile(toFileName(props.project.name), props.project);
+}
+
+function toFileName(name: string) {
+    return name.replace(/[^a-z0-9]/gi, '-').toLowerCase();
 }
 
 function onClickDeleteProject() {
