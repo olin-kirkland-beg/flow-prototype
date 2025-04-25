@@ -42,7 +42,7 @@ const onInput = (event: Event) => {
     outline: none;
 
     &:focus-within {
-        outline: 2px solid var(--color-orange);
+        outline: 2px solid var(--color-primary-alt);
         outline-offset: 0.2rem;
     }
 

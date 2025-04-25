@@ -45,8 +45,6 @@ import { PageName, router } from '@/router';
 import { useProjectsStore } from '@/store/projects-store';
 import { onMounted, ref } from 'vue';
 import ProjectCard from '../ProjectCard.vue';
-import TooltipController from '@/controllers/tooltip-controller';
-import InfoTooltip from '../tooltips/templates/InfoTooltip.vue';
 
 const projectsStore = useProjectsStore();
 const displayedProjects = ref<Project[]>([]);

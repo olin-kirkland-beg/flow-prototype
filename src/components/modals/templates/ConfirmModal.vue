@@ -68,7 +68,7 @@ function onClickCancel() {
 .choices {
     display: flex;
     gap: 0.8rem;
-    justify-content: center;
+    justify-content: flex-end;
 }
 
 @media (max-width: 768px) {
