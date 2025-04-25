@@ -1,7 +1,12 @@
 <template>
     <div class="modal__header">
         <slot></slot>
-        <Button icon class="close" v-if="closeButton" @click="onClickClose">
+        <Button
+            icon
+            class="close"
+            :class="closeButton ? '' : 'close--hidden'"
+            @click="onClickClose"
+        >
             <i class="fas fa-times"></i>
         </Button>
     </div>
@@ -36,5 +41,10 @@ function onClickClose() {
     .close {
         margin-left: auto;
     }
+}
+
+.close--hidden {
+    opacity: 0;
+    pointer-events: none;
 }
 </style>

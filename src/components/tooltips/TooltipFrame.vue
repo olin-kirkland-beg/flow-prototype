@@ -121,12 +121,6 @@ const y = computed(() => {
 }
 
 .tooltip {
-    &::before {
-        // content: '';
-        position: absolute;
-        background-color: red;
-    }
-
     &--top::before {
         width: 100%;
         height: 2rem;

@@ -11,7 +11,7 @@
                     <i class="fas fa-plus-circle"></i>
                     <span>New Project</span>
                 </Button>
-                <Button @click="onClickLoadProject" disabled>
+                <Button @click="onClickLoadProject">
                     <i class="fas fa-folder-open"></i>
                     <span>Load Project</span>
                 </Button>
@@ -40,22 +40,28 @@
 import Button from '@/components/ui/Button.vue';
 import Panel from '@/components/ui/Panel.vue';
 import StorageMeter from '@/components/ui/StorageMeter.vue';
+import ModalController from '@/controllers/modal-controller';
 import Project from '@/project';
 import { PageName, router } from '@/router';
 import { useProjectsStore } from '@/store/projects-store';
+import { v4 as uuid } from 'uuid';
 import { onMounted, ref } from 'vue';
+import LoadingModal from '../modals/templates/LoadingModal.vue';
 import ProjectCard from '../ProjectCard.vue';
+import InfoModal from '../modals/templates/InfoModal.vue';
 
 const projectsStore = useProjectsStore();
 const displayedProjects = ref<Project[]>([]);
 
-onMounted(() => {
-    // Populate displayedProjects with the projects from the store
+onMounted(updateDisplayedProjects);
+
+function updateDisplayedProjects() {
+    // Update displayedProjects with the projects from the store
     displayedProjects.value = [...projectsStore.projects].sort((a, b) => {
         // Sort by last modified date (most recent first)
         return b.updatedAt - a.updatedAt;
     });
-});
+}
 
 function onClickNewProject() {
     const newProject = new Project(
@@ -73,7 +79,46 @@ function onClickNewProject() {
 }
 
 function onClickLoadProject() {
-    // TODO: Load a project from the file system
+    ModalController.open(LoadingModal);
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.json'; // Accept only .json files
+    fileInput.multiple = false;
+    fileInput.addEventListener('change', async (event) => {
+        const { files } = event.target as HTMLInputElement;
+        if (!files || files.length === 0) return;
+        const file = files[0];
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+            const fileContent = e.target?.result as string;
+            try {
+                const newProject = JSON.parse(fileContent) as Project;
+                newProject.id = uuid();
+                projectsStore.addProject(newProject);
+                updateDisplayedProjects();
+                ModalController.close();
+                ModalController.open(InfoModal, {
+                    title: 'Success',
+                    message: '<p>Project loaded successfully.</p>'
+                });
+            } catch (error) {
+                console.error('Error loading project:', error);
+                ModalController.close();
+                ModalController.open(InfoModal, {
+                    title: 'Error',
+                    message: `<p>Failed to load project.</p><pre>${error}</pre>`,
+                    mode: 'danger'
+                });
+            }
+        };
+
+        reader.readAsText(file);
+    });
+    fileInput.addEventListener('cancel', (event) => {
+        console.log(event);
+        ModalController.close();
+    });
+    fileInput.click();
 }
 </script>
 

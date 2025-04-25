@@ -94,7 +94,7 @@ onMounted(() => {
 
 @keyframes slide-in-top {
     0% {
-        transform: translateY(10px);
+        transform: translateY(5px);
         opacity: 0;
     }
     100% {
@@ -105,7 +105,7 @@ onMounted(() => {
 
 @keyframes slide-in-bottom {
     0% {
-        transform: translateY(-10px);
+        transform: translateY(-5px);
         opacity: 0;
     }
     100% {
@@ -116,7 +116,7 @@ onMounted(() => {
 
 @keyframes slide-in-left {
     0% {
-        transform: translateX(10px);
+        transform: translateX(5px);
         opacity: 0;
     }
     100% {
@@ -127,7 +127,7 @@ onMounted(() => {
 
 @keyframes slide-in-right {
     0% {
-        transform: translateX(-10px);
+        transform: translateX(-5px);
         opacity: 0;
     }
     100% {
