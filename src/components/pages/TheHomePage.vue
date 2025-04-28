@@ -2,7 +2,9 @@
     <div class="page page--home">
         <Panel class="controls-panel">
             <div class="logo-header">
-                <h1 class="logo">{{ t('Home.logo') }}</h1>
+                <h1 class="logo">
+                    {{ t('Home.logo') }}<span class="version">{{ version }}</span>
+                </h1>
                 <h2>{{ t('Home.subtitle') }}</h2>
             </div>
 
@@ -26,23 +28,17 @@
                 }}
             </h2>
             <ul class="projects-list">
-                <ProjectCard
-                    v-for="project in displayedProjects"
-                    :project="project"
-                    :key="project.id"
-                ></ProjectCard>
+                <ProjectCard v-for="project in displayedProjects" :project="project" :key="project.id"></ProjectCard>
             </ul>
         </Panel>
         <footer>
-            <StorageMeter
-                :usedBytes="projectsStore.bytesUsedEstimate()"
-                :maxBytes="5 * 1024 * 1024"
-            />
+            <StorageMeter :usedBytes="projectsStore.bytesUsedEstimate()" :maxBytes="5 * 1024 * 1024" />
         </footer>
     </div>
 </template>
 
 <script setup lang="ts">
+import { version } from '@/../package.json'; // Import version from package.json
 import Button from '@/components/ui/Button.vue';
 import Panel from '@/components/ui/Panel.vue';
 import StorageMeter from '@/components/ui/StorageMeter.vue';
@@ -104,6 +100,11 @@ function onClickLoadProject() {
             try {
                 const newProject = JSON.parse(fileContent) as Project;
                 newProject.id = uuid();
+                // Adjust name
+                newProject.name = getUniqueName(
+                    projectsStore.projects.map((project) => project.name),
+                    newProject.name
+                );
                 projectsStore.addProject(newProject);
                 updateDisplayedProjects();
                 ModalController.close();
@@ -161,6 +162,13 @@ function onClickLoadProject() {
 h1.logo {
     font-size: 4rem;
     text-shadow: 0.2rem 0.2rem 0 var(--color-surface-alt);
+
+    > .version {
+        text-shadow: none;
+        font-size: 1.2rem;
+        font-weight: normal;
+        margin-left: 0.4rem;
+    }
 }
 
 .projects-list {

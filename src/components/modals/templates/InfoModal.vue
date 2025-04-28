@@ -1,5 +1,5 @@
 <template>
-    <ModalFrame :class="`modal-style--${props.mode}`">
+    <ModalFrame :class="props.mode && `modal-style--${props.mode}`">
         <template v-slot:header>
             <ModalHeader>
                 <h2>{{ props.title }}</h2>
@@ -10,10 +10,7 @@
                 <div class="info__content" v-html="props.message"></div>
                 <div class="choices">
                     <Button class="btn" @click="ModalController.close()">
-                        <span>{{
-                            props.confirmText ||
-                            t('Modals.Confirm.Controls.confirm')
-                        }}</span>
+                        <span>{{ props.confirmText || t('Modals.Confirm.Controls.confirm') }}</span>
                     </Button>
                 </div>
             </div>
@@ -31,7 +28,7 @@ const props = defineProps<{
     title: string;
     message: string;
     confirmText?: string;
-    mode: string;
+    mode?: string;
 }>();
 </script>
 
