@@ -3,7 +3,7 @@
     <Transition name="sidebar-transition">
         <Panel class="sidebar sidebar--right" v-if="selectedDialogue">
             <div class="sidebar__header">
-                <h2>State</h2>
+                <h2>{{ t('Project.State-sidebar.title') }}</h2>
                 <div>
                     <Button @click="onClickPanToDialogue" icon>
                         <i class="fas fa-crosshairs"></i>
@@ -14,49 +14,40 @@
                 </div>
             </div>
 
-            <InputGroup
-                v-model="selectedDialogue.data.label"
-                placeholder="Project name"
-            >
-                <span>Label</span>
+            <InputGroup v-model="selectedDialogue.data.label" placeholder="Project name">
+                <span>
+                    {{ t('Project.State-sidebar.name') }}
+                </span>
             </InputGroup>
 
             <!-- Add Option button -->
             <Button @click="onClickAddOption" full-width>
                 <i class="fas fa-plus"></i>
-                <span>Add Condition</span>
+                <span>{{ t('Project.State-sidebar.add-option') }}</span>
             </Button>
 
             <!-- List of options -->
             <List class="options">
                 <li v-if="options.length === 0">
-                    <em>No options yet.</em>
+                    <em> {{ t('Project.State-sidebar.no-options') }} </em>
                 </li>
                 <li v-for="option in options" :key="option.id">
                     <em class="ellipsis">{{ option.id }}</em>
                     <div class="connected-node">
                         <span v-if="option.edge">
-                            Connected to
-                            <Link
-                                @click="
-                                    emit('selectDialogue', option.edge.target)
-                                "
-                                >{{ option.edge.target }}</Link
-                            >
+                            {{ t('Project.State-sidebar.connected-to') }}
+                            <Link @click="emit('selectDialogue', option.edge.target)">{{ option.edge.target }}</Link>
                         </span>
-                        <span v-else>Not connected</span>
+                        <span v-else> {{ t('Project.State-sidebar.not-connected') }} </span>
                     </div>
                     <div class="flex">
                         <Button @click.stop="onClickRemoveOption(option.id)">
                             <i class="fas fa-trash"></i>
-                            <span>Delete</span>
+                            <span> {{ t('Project.State-sidebar.remove-option') }} </span>
                         </Button>
-                        <Button
-                            @click.stop="onClickUnlinkOption(option.id)"
-                            :disabled="!option.edge"
-                        >
+                        <Button @click.stop="onClickUnlinkOption(option.id)" :disabled="!option.edge">
                             <i class="fas fa-unlink"></i>
-                            <span>Unlink</span>
+                            <span>{{ t('Project.State-sidebar.unlink-option') }}</span>
                         </Button>
                     </div>
                 </li>
@@ -67,7 +58,7 @@
             <!-- Remove Dialogue button -->
             <Button @click="onClickRemoveSelectedDialogue" full-width>
                 <i class="fas fa-trash"></i>
-                <span>Delete State</span>
+                <span>{{ t('Project.State-sidebar.remove-state') }}</span>
             </Button>
         </Panel>
     </Transition>
@@ -82,6 +73,7 @@ import { Edge } from '@vue-flow/core';
 import { v4 as uuid } from 'uuid';
 import { computed } from 'vue';
 import InputGroup from './ui/InputGroup.vue';
+import { t } from '@/i18n/locale';
 
 const props = defineProps<{
     project: Project;
@@ -135,29 +127,18 @@ function onClickAddOption() {
         condition: null
     };
 
-    projectStore.addOption(
-        props.project.id,
-        props.selectedScene?.id,
-        props.selectedDialogue.id,
-        newOption
-    );
+    projectStore.addOption(props.project.id, props.selectedScene?.id, props.selectedDialogue.id, newOption);
 }
 
 function onClickRemoveOption(id: string) {
     if (!props.selectedDialogue) return;
-    projectStore.removeOption(
-        props.project.id,
-        props.selectedScene?.id,
-        props.selectedDialogue.id,
-        id
-    );
+    projectStore.removeOption(props.project.id, props.selectedScene?.id, props.selectedDialogue.id, id);
 }
 
 function onClickUnlinkOption(optionId: string) {
     if (!props.selectedDialogue) return;
     // Determine the edge id
-    const edgeId = options.value.find((option) => option.id === optionId)?.edge
-        ?.id;
+    const edgeId = options.value.find((option) => option.id === optionId)?.edge?.id;
     if (!edgeId) return;
     // Remove the edge from the scene
     projectStore.removeEdge(props.project.id, props.selectedScene?.id, edgeId);
@@ -166,11 +147,7 @@ function onClickUnlinkOption(optionId: string) {
 function onClickRemoveSelectedDialogue() {
     if (!props.selectedDialogue) return;
     emit('deselectDialogue');
-    projectStore.removeDialogue(
-        props.project.id,
-        props.selectedScene?.id,
-        props.selectedDialogue.id
-    );
+    projectStore.removeDialogue(props.project.id, props.selectedScene?.id, props.selectedDialogue.id);
 }
 </script>
 
