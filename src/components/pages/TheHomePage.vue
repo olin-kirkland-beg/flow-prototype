@@ -2,23 +2,29 @@
     <div class="page page--home">
         <Panel class="controls-panel">
             <div class="logo-header">
-                <h1 class="logo">Flow Prototype</h1>
-                <h2>A node-based state-machine tool</h2>
+                <h1 class="logo">{{ t('Home.logo') }}</h1>
+                <h2>{{ t('Home.subtitle') }}</h2>
             </div>
 
             <div class="flex">
                 <Button primary @click="onClickNewProject">
                     <i class="fas fa-plus-circle"></i>
-                    <span>New Project</span>
+                    <span> {{ t('Home.new-project') }} </span>
                 </Button>
                 <Button @click="onClickLoadProject">
                     <i class="fas fa-folder-open"></i>
-                    <span>Load Project</span>
+                    <span>{{ t('Home.load-project') }}</span>
                 </Button>
             </div>
         </Panel>
         <Panel v-if="displayedProjects.length > 0" class="projects-panel">
-            <h2>Projects</h2>
+            <h2>
+                {{
+                    t('Home.recent-projects', {
+                        count: displayedProjects.length.toString()
+                    })
+                }}
+            </h2>
             <ul class="projects-list">
                 <ProjectCard
                     v-for="project in displayedProjects"
@@ -41,14 +47,15 @@ import Button from '@/components/ui/Button.vue';
 import Panel from '@/components/ui/Panel.vue';
 import StorageMeter from '@/components/ui/StorageMeter.vue';
 import ModalController from '@/controllers/modal-controller';
+import { t } from '@/i18n/locale';
 import Project from '@/project';
 import { PageName, router } from '@/router';
 import { useProjectsStore } from '@/store/projects-store';
 import { v4 as uuid } from 'uuid';
 import { onMounted, ref } from 'vue';
+import InfoModal from '../modals/templates/InfoModal.vue';
 import LoadingModal from '../modals/templates/LoadingModal.vue';
 import ProjectCard from '../ProjectCard.vue';
-import InfoModal from '../modals/templates/InfoModal.vue';
 
 const projectsStore = useProjectsStore();
 const displayedProjects = ref<Project[]>([]);
@@ -98,15 +105,20 @@ function onClickLoadProject() {
                 updateDisplayedProjects();
                 ModalController.close();
                 ModalController.open(InfoModal, {
-                    title: 'Success',
-                    message: '<p>Project loaded successfully.</p>'
+                    title: t('Modals.Load-project-success.title'),
+                    message: t('Modals.Load-project-success.message', {
+                        name: newProject.name
+                    })
                 });
             } catch (error) {
                 console.error('Error loading project:', error);
                 ModalController.close();
                 ModalController.open(InfoModal, {
-                    title: 'Error',
-                    message: `<p>Failed to load project.</p><pre>${error}</pre>`,
+                    title: t('Modals.Load-project-error.title'),
+                    message: t('Modals.Load-project-error.message', {
+                        name: file.name,
+                        error: (error as Error).message
+                    }),
                     mode: 'danger'
                 });
             }
@@ -135,13 +147,17 @@ function onClickLoadProject() {
 .logo-header {
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
+    gap: 0.4rem;
     margin-bottom: 0.8rem;
+
+    > h2 {
+        opacity: 0.5;
+    }
 }
 
 h1.logo {
     font-size: 4rem;
-    // text-shadow: 0.2rem 0.2rem 0 var(--color-surface-alt);
+    text-shadow: 0.2rem 0.2rem 0 var(--color-surface-alt);
 }
 
 .projects-list {
