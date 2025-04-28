@@ -51,10 +51,10 @@
         />
     </div>
     <div v-else class="page page--project-not-found">
-        <p>Project not found.</p>
+        <p>{{ t('Project.not-found') }}</p>
         <Button @click="router.push({ name: PageName.HOME })">
             <i class="fas fa-chevron-left"></i>
-            <span>Home</span>
+            <span>{{ t('Project.back-to-home') }}</span>
         </Button>
     </div>
 </template>
@@ -63,6 +63,7 @@
 import DialogueNode from '@/components/flow/DialogueNode.vue';
 import Button from '@/components/ui/Button.vue';
 import Dialogue from '@/dialogue';
+import { t } from '@/i18n/locale';
 import Project from '@/project';
 import { PageName, router } from '@/router';
 import Scene from '@/scene';
@@ -101,7 +102,7 @@ const seekingNodeId = ref<string | null>(null); // Used to track the node being 
 
 // Initialize once the VueFlow instance is ready
 onPaneReady((vueFlowStore: VueFlowStore) => {
-    console.log('VueFlow instance ready', vueFlowStore);
+    // console.log('VueFlow instance ready', vueFlowStore);
     flowInstance.value = vueFlowStore;
     flowInstance.value?.setViewport({ x: 0, y: 0, zoom: 1 });
     selectedScene.value = project.value!.scenes[0] || null;

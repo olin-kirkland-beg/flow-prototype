@@ -5,7 +5,7 @@
             <div class="flex">
                 <Button @click="router.push({ name: PageName.HOME })">
                     <i class="fas fa-chevron-left"></i>
-                    <span>Home</span>
+                    <span>{{ t('Project.back-to-home') }}</span>
                 </Button>
             </div>
             <div class="sidebar__header">
@@ -15,14 +15,16 @@
                 </Button>
             </div>
             <p v-if="project.description">{{ project.description }}</p>
-            <p v-else><em>No description yet.</em></p>
+            <p v-else>
+                <em>{{ t('Project.no-description') }}</em>
+            </p>
             <Button @click="onClickAddScene" full-width>
                 <i class="fas fa-plus"></i>
-                <span>Add Flow</span>
+                <span>{{ t('Project.add-scene') }}</span>
             </Button>
             <List class="scenes">
                 <li v-if="project.scenes.length === 0">
-                    <em>No scenes yet.</em>
+                    <em>{{ t('Project.no-scenes') }}</em>
                 </li>
                 <li
                     v-for="scene in project.scenes"
@@ -46,14 +48,19 @@
                     <i class="fas fa-cog"></i>
                 </Button>
             </div>
-            <p>{{ selectedScene.description }}</p>
+            <p v-if="selectedScene.description">
+                {{ selectedScene.description }}
+            </p>
+            <p v-else>
+                <em>{{ t('Project.no-description') }}</em>
+            </p>
             <Button @click="onClickAddDialogue" full-width>
                 <i class="fas fa-plus"></i>
-                <span>Add State</span>
+                <span>{{ t('Project.add-dialogue') }}</span>
             </Button>
             <List class="dialogue">
                 <li v-if="selectedScene?.dialogues.length === 0">
-                    <em>No dialogues yet.</em>
+                    <em>{{ t('Project.no-dialogues') }}</em>
                 </li>
                 <li
                     v-for="dialogue in selectedScene?.dialogues"
@@ -70,27 +77,18 @@
                 </li>
             </List>
         </section>
-        <!-- <section class="sidebar__edges" v-if="selectedScene">
-            <h2>Edges</h2>
-            <List class="edges">
-                <li v-if="selectedScene.edges?.length === 0">
-                    <em>No edges yet.</em>
-                </li>
-                <li v-for="edge in selectedScene.edges" :key="edge.id">
-                    <pre>{{ edge.id }}</pre>
-                </li></List
-            >
-        </section> -->
     </Panel>
 </template>
 
 <script setup lang="ts">
 import ModalController from '@/controllers/modal-controller';
 import Dialogue from '@/dialogue';
+import { t } from '@/i18n/locale';
 import Project from '@/project';
 import { PageName, router } from '@/router';
 import Scene from '@/scene';
 import { useProjectsStore } from '@/store/projects-store';
+import { getUniqueName } from '@/utils/naming-util';
 import ProjectSettingsModal from './modals/templates/ProjectSettingsModal.vue';
 import SceneSettingsModal from './modals/templates/SceneSettingsModal.vue';
 
@@ -119,7 +117,12 @@ function onClickOpenSceneSettings() {
 }
 
 function onClickAddScene() {
-    const newScene = new Scene('Untitled Scene', 'Lorem ipsum dolor sit amet.');
+    const newScene = new Scene(
+        getUniqueName(
+            props.project.scenes.map((scene) => scene.name),
+            t('Project.new-scene-name')
+        )
+    );
     projectsStore.addScene(props.project.id, newScene);
 }
 

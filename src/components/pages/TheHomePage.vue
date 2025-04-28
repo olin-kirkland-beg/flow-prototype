@@ -51,6 +51,7 @@ import { t } from '@/i18n/locale';
 import Project from '@/project';
 import { PageName, router } from '@/router';
 import { useProjectsStore } from '@/store/projects-store';
+import { getUniqueName } from '@/utils/naming-util';
 import { v4 as uuid } from 'uuid';
 import { onMounted, ref } from 'vue';
 import InfoModal from '../modals/templates/InfoModal.vue';
@@ -72,8 +73,10 @@ function updateDisplayedProjects() {
 
 function onClickNewProject() {
     const newProject = new Project(
-        'New Project',
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+        getUniqueName(
+            projectsStore.projects.map((project) => project.name),
+            t('Home.new-project-name')
+        )
     );
 
     projectsStore.addProject(newProject);

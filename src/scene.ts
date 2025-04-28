@@ -9,10 +9,10 @@ export default class Scene {
     dialogues: Dialogue[]; // Used by Vue Flow
     edges: Edge[]; // Used by Vue Flow
 
-    constructor(name: string, description: string) {
+    constructor(name: string) {
         this.id = uuid();
         this.name = name;
-        this.description = description;
+        this.description = '';
         this.dialogues = [];
         this.edges = [];
     }

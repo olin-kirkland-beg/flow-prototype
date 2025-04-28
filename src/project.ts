@@ -9,10 +9,10 @@ export default class Project {
     updatedAt: number;
     scenes: Scene[];
 
-    constructor(name: string, description: string) {
+    constructor(name: string) {
         this.id = uuid();
         this.name = name;
-        this.description = description;
+        this.description = '';
         this.createdAt = Date.now();
         this.updatedAt = Date.now();
         this.scenes = [];
