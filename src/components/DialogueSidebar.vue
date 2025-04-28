@@ -124,7 +124,7 @@ function onClickAddOption() {
     const newOption: DialogueOption = {
         id: uuid(),
         label: 'New Option',
-        condition: null
+        condition: null,
     };
 
     projectStore.addOption(props.project.id, props.selectedScene?.id, props.selectedDialogue.id, newOption);

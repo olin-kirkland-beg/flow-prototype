@@ -21,7 +21,7 @@ export default class Dialogue {
     constructor() {
         this.id = uuid();
         this.data = {
-            label: 'Hello world!',
+            label: '',
             options: []
         };
         this.position = { x: 0, y: 0 };

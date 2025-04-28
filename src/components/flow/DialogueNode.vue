@@ -13,8 +13,7 @@
             :position="Position.Left"
             :type="'target'"
             :class="{
-                seeking:
-                    !!props.seekingNodeId && props.seekingNodeId !== props.id
+                seeking: !!props.seekingNodeId && props.seekingNodeId !== props.id
             }"
         />
 
@@ -39,14 +38,7 @@
                         :position="Position.Right"
                         :type="'source'"
                     />
-                    <i
-                        :class="[
-                            'fas',
-                            option.nextDialogueId
-                                ? 'fa-check-circle'
-                                : 'fa-dot-circle'
-                        ]"
-                    ></i>
+                    <i class="fas fa-dot-circle"></i>
                 </div>
             </li>
         </ul>
