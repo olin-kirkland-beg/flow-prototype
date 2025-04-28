@@ -25,3 +25,15 @@ export function getUniqueName(names: string[], newName: string) {
     const maxNumber = Math.max(...existingNumbers);
     return `${newName} ${maxNumber + 1}`;
 }
+
+/**
+ *
+ * @param name - The name to be converted to a file name.
+ * This function replaces all non-alphanumeric characters in the name with hyphens and converts it to lowercase.
+ * This is useful for creating a valid file name from a string.
+ * For example, "My File Name" would become "my-file-name".
+ * @returns - The converted file name.
+ */
+export function toFileName(name: string) {
+    return name.replace(/[^a-z0-9]/gi, '-').toLowerCase();
+}

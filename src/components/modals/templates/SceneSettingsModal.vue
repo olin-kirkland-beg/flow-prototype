@@ -2,17 +2,17 @@
     <ModalFrame>
         <template v-slot:header>
             <ModalHeader closeButton>
-                <h2>Flow Settings</h2>
+                <h2>{{ t('Modals.Scene-settings.title') }}</h2>
             </ModalHeader>
         </template>
         <template v-slot:content>
             <div class="scene-settings">
                 <section>
-                    <InputGroup v-model="scene.name" placeholder="Project name">
-                        <span>Name</span>
+                    <InputGroup v-model="scene.name" :placeholder="t('Modals.Scene-settings.name')">
+                        <span>{{ t('Modals.Scene-settings.name') }}</span>
                     </InputGroup>
-                    <InputGroup v-model="scene.description" placeholder="Scene description">
-                        <span>Description</span>
+                    <InputGroup v-model="scene.description" :placeholder="t('Modals.Scene-settings.description')">
+                        <span>{{ t('Modals.Scene-settings.description') }}</span>
                     </InputGroup>
                 </section>
 
@@ -20,22 +20,22 @@
                     <Card>
                         <div class="flex spread full-width">
                             <div>
-                                <h3>Delete Project</h3>
-                                <p>Permanently delete this project.</p>
+                                <h3>{{ t('Modals.Scene-settings.Delete-scene.title') }}</h3>
+                                <p>{{ t('Modals.Scene-settings.Delete-scene.description') }}</p>
                             </div>
                             <Button
                                 @click="onClickDeleteScene"
                                 danger
                                 @mouseover="
                                     TooltipController.open(InfoTooltip, {
-                                        html: 'All project data will be <em>lost!</em>',
+                                        html: t('Modals.Scene-settings.Delete-scene.tooltip'),
                                         target: $event.currentTarget,
                                         position: 'bottom'
                                     })
                                 "
                             >
                                 <i class="fas fa-exclamation-triangle"></i>
-                                <span>Delete Project</span>
+                                <span> {{ t('Modals.Scene-settings.Delete-scene.button') }} </span>
                             </Button>
                         </div>
                     </Card>
@@ -71,10 +71,10 @@ const props = defineProps<{
 function onClickDeleteScene() {
     ModalController.close();
     ModalController.open(ConfirmModal, {
-        title: t('UI.Modals.Delete-scene.title'),
-        message: t('UI.Modals.Delete-scene.message'),
-        confirmText: t('UI.Modals.Delete-scene.Controls.confirm'),
-        cancelText: t('UI.Modals.Delete-scene.Controls.cancel'),
+        title: t('Modals.Delete-scene.title'),
+        message: t('Modals.Delete-scene.message'),
+        confirmText: t('Modals.Delete-scene.Controls.confirm'),
+        cancelText: t('Modals.Delete-scene.Controls.cancel'),
         isConfirmButtonDanger: true,
         onConfirm: () => {
             useProjectsStore().removeScene(props.project.id, props.scene.id);

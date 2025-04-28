@@ -13,7 +13,7 @@
                     <Button class="btn" @click="onClickCancel">
                         <span>{{
                             props.cancelText ||
-                            useI18n().t('UI.Modals.Confirm.Controls.cancel')
+                            useI18n().t('Modals.Confirm.Controls.cancel')
                         }}</span>
                     </Button>
                     <Button
@@ -24,7 +24,7 @@
                     >
                         <span>{{
                             props.confirmText ||
-                            useI18n().t('UI.Modals.Confirm.Controls.confirm')
+                            useI18n().t('Modals.Confirm.Controls.confirm')
                         }}</span>
                     </Button>
                 </div>

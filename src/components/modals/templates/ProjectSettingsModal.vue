@@ -107,6 +107,7 @@ import { t } from '@/i18n/locale';
 import Project from '@/project';
 import { PageName, router } from '@/router';
 import { useProjectsStore } from '@/store/projects-store';
+import { toFileName } from '@/utils/naming-util';
 import ConfirmModal from './ConfirmModal.vue';
 import ProjectSettingsModal from './ProjectSettingsModal.vue';
 
@@ -118,17 +119,13 @@ function onClickSaveProjectToFile() {
     Project.saveToFile(toFileName(props.project.name), props.project);
 }
 
-function toFileName(name: string) {
-    return name.replace(/[^a-z0-9]/gi, '-').toLowerCase();
-}
-
 function onClickDeleteProject() {
     ModalController.close();
     ModalController.open(ConfirmModal, {
-        title: t('UI.Modals.Delete-project.title'),
-        message: t('UI.Modals.Delete-project.message'),
-        confirmText: t('UI.Modals.Delete-project.Controls.confirm'),
-        cancelText: t('UI.Modals.Delete-project.Controls.cancel'),
+        title: t('Modals.Delete-project.title'),
+        message: t('Modals.Delete-project.message'),
+        confirmText: t('Modals.Delete-project.Controls.confirm'),
+        cancelText: t('Modals.Delete-project.Controls.cancel'),
         isConfirmButtonDanger: true,
         onConfirm: () => {
             router.push({ name: PageName.HOME });
