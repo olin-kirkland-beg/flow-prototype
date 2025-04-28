@@ -14,7 +14,10 @@
                 </div>
             </div>
 
-            <InputGroup v-model="selectedDialogue.data.label" placeholder="Project name">
+            <InputGroup
+                v-model="selectedDialogue.data.label"
+                :placeholder="t('Project.State-sidebar.name')"
+            >
                 <span>
                     {{ t('Project.State-sidebar.name') }}
                 </span>
@@ -31,6 +34,16 @@
                 <li v-if="options.length === 0">
                     <em> {{ t('Project.State-sidebar.no-options') }} </em>
                 </li>
+
+                <OptionListItem
+                    v-for="option in options"
+                    :key="option.id"
+                    :option="option"
+                    :dialogue="selectedDialogue"
+                    :projectId="project.id"
+                    :sceneId="selectedScene.id"
+                />
+
                 <li v-for="option in options" :key="option.id">
                     <em class="ellipsis">{{ option.id }}</em>
                     <div class="connected-node">
@@ -53,8 +66,6 @@
                 </li>
             </List>
 
-            <!-- <pre>{{ selectedDialogue }}</pre> -->
-
             <!-- Remove Dialogue button -->
             <Button @click="onClickRemoveSelectedDialogue" full-width>
                 <i class="fas fa-trash"></i>
@@ -66,14 +77,16 @@
 
 <script setup lang="ts">
 import Dialogue, { DialogueOption } from '@/dialogue';
+import { t } from '@/i18n/locale';
 import Project from '@/project';
 import Scene from '@/scene';
 import { useProjectsStore } from '@/store/projects-store';
 import { Edge } from '@vue-flow/core';
 import { v4 as uuid } from 'uuid';
 import { computed } from 'vue';
+import OptionListItem from './OptionListItem.vue';
 import InputGroup from './ui/InputGroup.vue';
-import { t } from '@/i18n/locale';
+import { getUniqueName } from '@/utils/naming-util';
 
 const props = defineProps<{
     project: Project;
@@ -123,8 +136,11 @@ function onClickAddOption() {
     if (!props.selectedDialogue) return;
     const newOption: DialogueOption = {
         id: uuid(),
-        label: 'New Option',
-        condition: null,
+        label: getUniqueName(
+            props.selectedDialogue.data.options.map((option) => option.label),
+            t('Project.State-sidebar.new-option')
+        ),
+        condition: null
     };
 
     projectStore.addOption(props.project.id, props.selectedScene?.id, props.selectedDialogue.id, newOption);
