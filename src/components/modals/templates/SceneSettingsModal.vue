@@ -8,14 +8,10 @@
         <template v-slot:content>
             <div class="scene-settings">
                 <section>
-                    <p><strong>Scene ID:</strong> {{ scene.id }}</p>
                     <InputGroup v-model="scene.name" placeholder="Project name">
                         <span>Name</span>
                     </InputGroup>
-                    <InputGroup
-                        v-model="scene.description"
-                        placeholder="Scene description"
-                    >
+                    <InputGroup v-model="scene.description" placeholder="Scene description">
                         <span>Description</span>
                     </InputGroup>
                 </section>
@@ -43,6 +39,9 @@
                             </Button>
                         </div>
                     </Card>
+                </section>
+                <section>
+                    <h4>{{ scene.id }}</h4>
                 </section>
             </div>
         </template>
@@ -105,7 +104,7 @@ function onClickDeleteScene() {
 
 section {
     display: flex;
-    width: 40rem;
+    width: 48rem;
     flex-direction: column;
     gap: 0.8rem;
 }

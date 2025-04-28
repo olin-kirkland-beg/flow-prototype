@@ -2,49 +2,32 @@
     <ModalFrame>
         <template v-slot:header>
             <ModalHeader closeButton>
-                <h2>Project Settings</h2>
+                <h2>{{ t('Modals.Project-settings.title') }}</h2>
             </ModalHeader>
         </template>
         <template v-slot:content>
             <div class="project-settings">
                 <section>
-                    <p><strong>Project ID:</strong> {{ project.id }}</p>
-                    <InputGroup
-                        v-model="project.name"
-                        placeholder="Project name"
-                    >
-                        <span>Name</span>
+                    <InputGroup v-model="project.name" :placeholder="t('Modals.Project-settings.name')">
+                        <span>{{ t('Modals.Project-settings.name') }}</span>
                     </InputGroup>
-                    <InputGroup
-                        v-model="project.description"
-                        placeholder="Project description"
-                    >
-                        <span>Description</span>
+                    <InputGroup v-model="project.description" :placeholder="t('Modals.Project-settings.description')">
+                        <span>{{ t('Modals.Project-settings.description') }}</span>
                     </InputGroup>
                     <div class="flex">
-                        <Badge
-                            color="var(--color-surface-alt)"
-                            :useLightText="true"
-                        >
-                            <span
-                                >Created
-                                {{
-                                    new Date(
-                                        project.createdAt
-                                    ).toLocaleDateString()
-                                }}
-                            </span>
+                        <Badge color="var(--color-surface-alt)" :useLightText="true">
+                            <span>{{
+                                t('Modals.Project-settings.created-at', {
+                                    date: new Date(project.createdAt).toLocaleString()
+                                })
+                            }}</span>
                         </Badge>
-                        <Badge
-                            color="var(--color-surface-alt)"
-                            :useLightText="true"
-                        >
-                            <span
-                                >Modified
-                                {{
-                                    new Date(project.updatedAt).toLocaleString()
-                                }}</span
-                            >
+                        <Badge color="var(--color-surface-alt)" :useLightText="true">
+                            <span>{{
+                                t('Modals.Project-settings.updated-at', {
+                                    date: new Date(project.updatedAt).toLocaleString()
+                                })
+                            }}</span>
                         </Badge>
                     </div>
                 </section>
@@ -53,10 +36,11 @@
                     <Card>
                         <div class="flex spread full-width">
                             <div>
-                                <h3>Save Project to file</h3>
+                                <h3>
+                                    {{ t('Modals.Project-settings.Save-to-file.title') }}
+                                </h3>
                                 <p>
-                                    Save the project to a .json file so it can
-                                    be copid or shared.
+                                    {{ t('Modals.Project-settings.Save-to-file.description') }}
                                 </p>
                             </div>
                             <Button
@@ -70,7 +54,9 @@
                                 "
                             >
                                 <i class="fas fa-file-download"></i>
-                                <span>Save to file</span>
+                                <span>
+                                    {{ t('Modals.Project-settings.Save-to-file.button') }}
+                                </span>
                             </Button>
                         </div>
                     </Card>
@@ -80,25 +66,28 @@
                     <Card>
                         <div class="flex spread full-width">
                             <div>
-                                <h3>Delete Project</h3>
-                                <p>Permanently delete this project.</p>
+                                <h3>{{ t('Modals.Project-settings.Delete-project.title') }}</h3>
+                                <p>{{ t('Modals.Project-settings.Delete-project.description') }}</p>
                             </div>
                             <Button
                                 @click="onClickDeleteProject"
                                 danger
                                 @mouseover="
                                     TooltipController.open(InfoTooltip, {
-                                        html: 'All project data will be <em>lost!</em>',
+                                        html: t('Modals.Project-settings.Delete-project.tooltip'),
                                         target: $event.currentTarget,
                                         position: 'bottom'
                                     })
                                 "
                             >
                                 <i class="fas fa-exclamation-triangle"></i>
-                                <span>Delete Project</span>
+                                <span> {{ t('Modals.Project-settings.Delete-project.button') }} </span>
                             </Button>
                         </div>
                     </Card>
+                </section>
+                <section>
+                    <h4>{{ project.id }}</h4>
                 </section>
             </div>
         </template>
@@ -169,7 +158,7 @@ function onClickDeleteProject() {
 
 section {
     display: flex;
-    width: 40rem;
+    width: 48rem;
     flex-direction: column;
     gap: 0.8rem;
 }
