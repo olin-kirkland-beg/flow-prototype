@@ -72,7 +72,13 @@
                 >
                     <i class="fas fa-sticky-note"></i>
                     <div class="full-width flex spread">
-                        <em>{{ dialogue.id.substring(0, 8) }}</em>
+                        <em>{{ dialogue.data.label }}</em>
+                        <!-- Connections -->
+                        <div class="flex">
+                            <span class="muted">
+                                {{ dialogue.data.options.length }}
+                            </span>
+                        </div>
                     </div>
                 </li>
             </List>
@@ -129,11 +135,7 @@ function onClickAddScene() {
 function onClickAddDialogue() {
     if (!props.selectedScene) return;
     const newDialogue = new Dialogue();
-    projectsStore.addDialogue(
-        props.project.id,
-        props.selectedScene.id,
-        newDialogue
-    );
+    projectsStore.addDialogue(props.project.id, props.selectedScene.id, newDialogue);
 }
 
 function onClickSelectScene(scene: Scene) {
@@ -157,11 +159,7 @@ function onClickSelectDialogue(id: string) {
     width: 100%;
     // border-bottom: 1px solid var(--color-surface-alt);
     // Background is a gradient light gray to transparent top to down
-    background: linear-gradient(
-        to bottom,
-        var(--color-surface) 0%,
-        transparent 100%
-    );
+    background: linear-gradient(to bottom, var(--color-surface) 0%, transparent 100%);
 
     padding-left: 0.8rem;
     border-radius: 5px;
