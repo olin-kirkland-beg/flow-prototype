@@ -19,7 +19,7 @@
 
         <div class="node-content">
             <div class="node-content__header">
-                <p>{{ props.id }}</p>
+                <h4>{{ props.id }}</h4>
             </div>
             <div class="node-content__body">
                 <p>{{ props.data.label }}</p>
@@ -30,7 +30,7 @@
         <ul class="options">
             <li v-for="(option, index) in props.data.options" :key="index">
                 <p>{{ option.label }}</p>
-                <p>{{ option.id }}</p>
+                <h4>{{ option.id }}</h4>
                 <div class="handle-container">
                     <Handle
                         :id="option.id"
@@ -103,6 +103,24 @@ function updateHeight() {
     flex-direction: column;
     gap: 0.4rem;
     width: 100%;
+    .node-content__header {
+        position: relative;
+        display: flex;
+        width: 100%;
+        height: 3.2rem;
+        background-color: var(--color-on-surface-alt);
+        border-bottom: 1px solid var(--color-on-surface);
+        color: var(--color-background);
+        align-items: center;
+        > h4 {
+            text-align: left;
+            margin: 0 0.8rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: inherit;
+        }
+    }
 
     .node-content__body {
         width: 100%;
@@ -114,25 +132,6 @@ function updateHeight() {
             text-align: left;
             overflow: hidden;
             width: 100%;
-        }
-    }
-
-    .node-content__header {
-        position: relative;
-        display: flex;
-        width: 100%;
-        height: 3.2rem;
-        background-color: var(--color-on-surface-alt);
-        border-bottom: 1px solid var(--color-on-surface);
-        color: var(--color-background);
-        align-items: center;
-        p {
-            text-align: left;
-            margin: 0 0.8rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            color: inherit;
         }
     }
 }
@@ -162,11 +161,15 @@ ul.options {
     }
 
     li {
+        display: flex;
+        flex-direction: column;
         padding: 0.8rem 1.2rem;
         border-top: 1px solid var(--color-on-surface);
         position: relative;
+        gap: 0.4rem;
 
-        p {
+        p,
+        h4 {
             width: 100%;
             text-align: left;
         }

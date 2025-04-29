@@ -4,22 +4,29 @@
         <div class="connected-node">
             <span v-if="option.edge">
                 {{ t('Project.State-sidebar.connected-to') }}
-                <Link @click="emit('selectDialogue', option.edge.target)">{{ targetName }}</Link>
+                <Link @click="emit('selectDialogue', option.edge.target)">
+                    {{ targetName }}
+                </Link>
             </span>
-            <span v-else> {{ t('Project.State-sidebar.not-connected') }} </span>
+            <span v-else>
+                {{ t('Project.State-sidebar.not-connected') }}
+            </span>
         </div>
         <Button @click="onClickEditOption">
             <i class="fas fa-edit"></i>
             <span>{{ t('Project.Option-card.edit-option') }}</span>
         </Button>
+        <h4 class="ellipsis">{{ option.id }}</h4>
     </li>
 </template>
 
 <script setup lang="ts">
 import Button from '@/components/ui/Button.vue';
+import ModalController from '@/controllers/modal-controller';
 import { t } from '@/i18n/locale';
 import { useProjectsStore } from '@/store/projects-store';
 import { computed } from 'vue';
+import EditOptionModal from './modals/templates/EditOptionModal.vue';
 
 const props = defineProps({
     option: {
@@ -46,16 +53,28 @@ const emit = defineEmits<{
 
 const targetName = computed(() => {
     if (!props.option.edge) return null;
-    const targetDialogue = useProjectsStore().getDialogue(
-        props.projectId,
-        props.sceneId,
-        props.option.edge.target
-    );
+    const targetDialogue = useProjectsStore().getDialogue(props.projectId, props.sceneId, props.option.edge.target);
     return targetDialogue ? targetDialogue.data.label : null;
 });
 
+function onChangeTarget(newTargetId: string) {
+    if (!newTargetId) {
+        // Remove the target
+        // Determine the edge id
+        // const edgeId = options.value.find((option) => option.id === optionId)?.edge?.id;
+        // if (!edgeId) return;
+        // // Remove the edge from the scene
+        // projectStore.removeEdge(props.project.id, props.selectedScene?.id, edgeId);
+    }
+}
+
 function onClickEditOption() {
-    // Todo
+    ModalController.open(EditOptionModal, {
+        option: props.option,
+        projectId: props.projectId,
+        sceneId: props.sceneId,
+        dialogueId: props.dialogue.id
+    });
 }
 </script>
 

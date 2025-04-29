@@ -14,13 +14,8 @@
                 </div>
             </div>
 
-            <InputGroup
-                v-model="selectedDialogue.data.label"
-                :placeholder="t('Project.State-sidebar.name')"
-            >
-                <span>
-                    {{ t('Project.State-sidebar.name') }}
-                </span>
+            <InputGroup v-model="selectedDialogue.data.label" :placeholder="t('Project.State-sidebar.name')">
+                <span>{{ t('Project.State-sidebar.name') }}</span>
             </InputGroup>
 
             <!-- Add Option button -->
@@ -42,28 +37,8 @@
                     :dialogue="selectedDialogue"
                     :projectId="project.id"
                     :sceneId="selectedScene.id"
+                    @selectDialogue="emit('selectDialogue', $event)"
                 />
-
-                <li v-for="option in options" :key="option.id">
-                    <em class="ellipsis">{{ option.id }}</em>
-                    <div class="connected-node">
-                        <span v-if="option.edge">
-                            {{ t('Project.State-sidebar.connected-to') }}
-                            <Link @click="emit('selectDialogue', option.edge.target)">{{ option.edge.target }}</Link>
-                        </span>
-                        <span v-else> {{ t('Project.State-sidebar.not-connected') }} </span>
-                    </div>
-                    <div class="flex">
-                        <Button @click.stop="onClickRemoveOption(option.id)">
-                            <i class="fas fa-trash"></i>
-                            <span> {{ t('Project.State-sidebar.remove-option') }} </span>
-                        </Button>
-                        <Button @click.stop="onClickUnlinkOption(option.id)" :disabled="!option.edge">
-                            <i class="fas fa-unlink"></i>
-                            <span>{{ t('Project.State-sidebar.unlink-option') }}</span>
-                        </Button>
-                    </div>
-                </li>
             </List>
 
             <!-- Remove Dialogue button -->
@@ -81,12 +56,12 @@ import { t } from '@/i18n/locale';
 import Project from '@/project';
 import Scene from '@/scene';
 import { useProjectsStore } from '@/store/projects-store';
+import { getUniqueName } from '@/utils/naming-util';
 import { Edge } from '@vue-flow/core';
 import { v4 as uuid } from 'uuid';
 import { computed } from 'vue';
 import OptionListItem from './OptionListItem.vue';
 import InputGroup from './ui/InputGroup.vue';
-import { getUniqueName } from '@/utils/naming-util';
 
 const props = defineProps<{
     project: Project;
@@ -144,20 +119,6 @@ function onClickAddOption() {
     };
 
     projectStore.addOption(props.project.id, props.selectedScene?.id, props.selectedDialogue.id, newOption);
-}
-
-function onClickRemoveOption(id: string) {
-    if (!props.selectedDialogue) return;
-    projectStore.removeOption(props.project.id, props.selectedScene?.id, props.selectedDialogue.id, id);
-}
-
-function onClickUnlinkOption(optionId: string) {
-    if (!props.selectedDialogue) return;
-    // Determine the edge id
-    const edgeId = options.value.find((option) => option.id === optionId)?.edge?.id;
-    if (!edgeId) return;
-    // Remove the edge from the scene
-    projectStore.removeEdge(props.project.id, props.selectedScene?.id, edgeId);
 }
 
 function onClickRemoveSelectedDialogue() {

@@ -68,11 +68,7 @@ export const useProjectsStore = defineStore('projects', () => {
     }
 
     // Get a dialogue by ID
-    function getDialogue(
-        projectId: string,
-        sceneId: string,
-        dialogueId: string
-    ): Dialogue | undefined {
+    function getDialogue(projectId: string, sceneId: string, dialogueId: string): Dialogue | undefined {
         const project = getProject(projectId);
         if (!project) return undefined; // Project not found
         const scene = project.scenes.find((s) => s.id === sceneId);
@@ -81,11 +77,7 @@ export const useProjectsStore = defineStore('projects', () => {
     }
 
     // Add a dialogue to a scene
-    function addDialogue(
-        projectId: string,
-        sceneId: string,
-        dialogue: Dialogue
-    ): void {
+    function addDialogue(projectId: string, sceneId: string, dialogue: Dialogue): void {
         const project = getProject(projectId);
         if (!project) return; // Project not found
         const scene = project.scenes.find((s) => s.id === sceneId);
@@ -94,33 +86,18 @@ export const useProjectsStore = defineStore('projects', () => {
     }
 
     // Remove a dialogue from a scene
-    function removeDialogue(
-        projectId: string,
-        sceneId: string,
-        dialogueId: string
-    ): void {
+    function removeDialogue(projectId: string, sceneId: string, dialogueId: string): void {
         const project = getProject(projectId);
         if (!project) return; // Project not found
         const scene = project.scenes.find((s) => s.id === sceneId);
         if (!scene) return; // Scene not found
-        const dialogueIndex = scene.dialogues.findIndex(
-            (dialogue) => dialogue.id === dialogueId
-        );
+        const dialogueIndex = scene.dialogues.findIndex((dialogue) => dialogue.id === dialogueId);
         if (dialogueIndex === -1) return; // Dialogue not found
-        scene.dialogues = scene.dialogues.filter(
-            (dialogue) => dialogue.id !== dialogueId
-        );
-
-        cleanEdges(projectId, sceneId);
+        scene.dialogues = scene.dialogues.filter((dialogue) => dialogue.id !== dialogueId);
     }
 
     // Add an option to a dialogue
-    function addOption(
-        projectId: string,
-        sceneId: string,
-        dialogueId: string,
-        option: DialogueOption
-    ): void {
+    function addOption(projectId: string, sceneId: string, dialogueId: string, option: DialogueOption): void {
         const project = getProject(projectId);
         if (!project) return; // Project not found
         const scene = project.scenes.find((s) => s.id === sceneId);
@@ -131,27 +108,16 @@ export const useProjectsStore = defineStore('projects', () => {
     }
 
     // Remove an option from a dialogue
-    function removeOption(
-        projectId: string,
-        sceneId: string,
-        dialogueId: string,
-        optionId: string
-    ): void {
+    function removeOption(projectId: string, sceneId: string, dialogueId: string, optionId: string): void {
         const project = getProject(projectId);
         if (!project) return; // Project not found
         const scene = project.scenes.find((s) => s.id === sceneId);
         if (!scene) return; // Scene not found
         const dialogue = scene.dialogues.find((d) => d.id === dialogueId);
         if (!dialogue) return; // Dialogue not found
-        const optionIndex = dialogue.data.options.findIndex(
-            (option) => option.id === optionId
-        );
+        const optionIndex = dialogue.data.options.findIndex((option) => option.id === optionId);
         if (optionIndex === -1) return; // Option not found
-        dialogue.data.options = dialogue.data.options.filter(
-            (option) => option.id !== optionId
-        );
-
-        cleanEdges(projectId, sceneId);
+        dialogue.data.options = dialogue.data.options.filter((option) => option.id !== optionId);
     }
 
     // Add an edge
@@ -188,11 +154,7 @@ export const useProjectsStore = defineStore('projects', () => {
     }
 
     // Remove an edge (unlink an option)
-    function removeEdge(
-        projectId: string,
-        sceneId: string,
-        edgeId: string
-    ): void {
+    function removeEdge(projectId: string, sceneId: string, edgeId: string): void {
         console.log('Removing edge:', edgeId);
 
         const project = getProject(projectId);
@@ -210,33 +172,6 @@ export const useProjectsStore = defineStore('projects', () => {
             'Edges after removal:',
             scene.edges.map((edge) => edge.id)
         );
-
-        cleanEdges(projectId, sceneId);
-    }
-
-    function cleanEdges(projectId: string, sceneId: string): void {
-        return;
-        const project = getProject(projectId);
-        if (!project) return; // Project not found
-        const scene = project.scenes.find((s) => s.id === sceneId);
-        if (!scene) return; // Scene not found
-        // Ensure there are no edges that reference non-existent nodes or options
-        scene.edges = scene.edges.filter((edge) => {
-            const sourceDialogue = scene.dialogues.find(
-                (dialogue) => dialogue.id === edge.source
-            );
-            if (!sourceDialogue) return false; // Source dialogue not found
-
-            const targetDialogue = scene.dialogues.find(
-                (dialogue) => dialogue.id === edge.target
-            );
-            if (!targetDialogue) return false; // Target dialogue not found
-
-            const targetOption = sourceDialogue?.data.options.find(
-                (option) => option.id === edge.target
-            );
-            return !!targetOption; // Target option found
-        });
     }
 
     return {
