@@ -1,10 +1,17 @@
 <template>
-    <div class="card">
+    <div class="card" :class="{ 'card--allow-overflow': overflow }">
         <slot></slot>
     </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const props = defineProps({
+    overflow: {
+        type: Boolean,
+        default: false
+    }
+});
+</script>
 
 <style lang="scss" scoped>
 .card {
@@ -18,5 +25,13 @@
     flex-direction: column;
     align-items: start;
     gap: 0.8rem;
+
+    &--allow-overflow {
+        overflow: visible;
+    }
+}
+
+:deep(h3) {
+    margin-bottom: 0.4rem;
 }
 </style>

@@ -6,7 +6,7 @@
 
 <script setup lang="ts"></script>
 
-<style scoped lang="scss">
+<style lang="scss">
 span.link {
     display: inline;
     color: var(--color-primary);

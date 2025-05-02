@@ -115,7 +115,10 @@ function onClickAddOption() {
             props.selectedDialogue.data.options.map((option) => option.label),
             t('Project.State-sidebar.new-option')
         ),
-        condition: null
+        condition: {
+            address: '',
+            command: ''
+        }
     };
 
     projectStore.addOption(props.project.id, props.selectedScene?.id, props.selectedDialogue.id, newOption);

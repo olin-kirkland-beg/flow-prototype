@@ -76,6 +76,22 @@ export const useProjectsStore = defineStore('projects', () => {
         return scene.dialogues.find((dialogue) => dialogue.id === dialogueId);
     }
 
+    // Get an option by ID
+    function getOption(
+        projectId: string,
+        sceneId: string,
+        dialogueId: string,
+        optionId: string
+    ): DialogueOption | undefined {
+        const project = getProject(projectId);
+        if (!project) return undefined; // Project not found
+        const scene = project.scenes.find((s) => s.id === sceneId);
+        if (!scene) return undefined; // Scene not found
+        const dialogue = scene.dialogues.find((d) => d.id === dialogueId);
+        if (!dialogue) return undefined; // Dialogue not found
+        return dialogue.data.options.find((option) => option.id === optionId);
+    }
+
     // Add a dialogue to a scene
     function addDialogue(projectId: string, sceneId: string, dialogue: Dialogue): void {
         const project = getProject(projectId);
@@ -94,6 +110,7 @@ export const useProjectsStore = defineStore('projects', () => {
         const dialogueIndex = scene.dialogues.findIndex((dialogue) => dialogue.id === dialogueId);
         if (dialogueIndex === -1) return; // Dialogue not found
         scene.dialogues = scene.dialogues.filter((dialogue) => dialogue.id !== dialogueId);
+        cleanEdges();
     }
 
     // Add an option to a dialogue
@@ -118,6 +135,7 @@ export const useProjectsStore = defineStore('projects', () => {
         const optionIndex = dialogue.data.options.findIndex((option) => option.id === optionId);
         if (optionIndex === -1) return; // Option not found
         dialogue.data.options = dialogue.data.options.filter((option) => option.id !== optionId);
+        cleanEdges();
     }
 
     // Add an edge
@@ -174,6 +192,19 @@ export const useProjectsStore = defineStore('projects', () => {
         );
     }
 
+    function cleanEdges() {
+        // Edges with a missing source or target should be removed
+        projects.value.forEach((project) => {
+            project.scenes.forEach((scene) => {
+                scene.edges = scene.edges.filter(
+                    (edge) =>
+                        project.scenes.some((s) => s.id === edge.source) &&
+                        project.scenes.some((s) => s.id === edge.target)
+                );
+            });
+        });
+    }
+
     return {
         projects,
         loadProjectsFromLocalStorage,
@@ -185,6 +216,7 @@ export const useProjectsStore = defineStore('projects', () => {
         addScene,
         removeScene,
         getDialogue,
+        getOption,
         addDialogue,
         removeDialogue,
         addOption,

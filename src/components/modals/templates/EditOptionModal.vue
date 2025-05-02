@@ -13,12 +13,12 @@
                         {{ t('Modals.Edit-option.label') }}
                     </InputGroup>
                 </section>
-                <section>
+                <Card overflow>
                     <!-- Condition -->
                     <p class="with-inline-comboboxes">
                         {{ t('Modals.Edit-option.condition-description-1') }}
                         <ComboBox
-                            v-model="address"
+                            v-model="option.condition!.address"
                             :options="addressList"
                             :placeholder="t('Modals.Edit-option.address-placeholder')"
                         >
@@ -26,30 +26,41 @@
                         </ComboBox>
                         {{ t('Modals.Edit-option.condition-description-2') }}
                         <ComboBox
-                            v-model="command"
+                            v-model="option.condition!.command"
                             :options="commandList"
                             :placeholder="t('Modals.Edit-option.command-placeholder')"
                         ></ComboBox>
                     </p>
-                </section>
+                </Card>
                 <Card>
                     <!-- Choose target -->
                     <div class="flex spread full-width">
                         <div>
                             <h3>{{ t('Modals.Edit-option.Target.title') }}</h3>
-                            <p v-html="t('Modals.Edit-option.Target.description', { name: targetName as string })"></p>
+                            <p
+                                v-if="targetName"
+                                v-html="t('Modals.Edit-option.Target.description', { name: targetName as string })"
+                            ></p>
+                            <p v-else>{{ t('Modals.Edit-option.Target.description-no-target') }}</p>
                         </div>
-                        <Button>
+                        <Button @click="onClickUnlinkOption" :disabled="!targetName">
                             <span> {{ t('Modals.Edit-option.Target.unlink') }}</span>
                         </Button>
                     </div>
                 </Card>
-                <div>
-                    <Button @click="onClickRemoveOption">
-                        <i class="fas fa-trash"></i>
-                        <span>{{ t('Modals.Edit-option.delete') }}</span>
-                    </Button>
-                </div>
+                <Card>
+                    <div class="flex spread full-width">
+                        <div>
+                            <h3>{{ t('Modals.Edit-option.Delete.title') }}</h3>
+                            <p>{{ t('Modals.Edit-option.Delete.description') }}</p>
+                        </div>
+                        <Button @click="onClickRemoveOption">
+                            <i class="fas fa-trash"></i>
+                            <span>{{ t('Modals.Edit-option.Delete.delete') }}</span>
+                        </Button>
+                    </div>
+                </Card>
+                <h4 class="ellipsis">{{ option.id }}</h4>
             </div>
         </template>
     </ModalFrame>
@@ -65,13 +76,9 @@ import InputGroup from '@/components/ui/InputGroup.vue';
 import ModalController from '@/controllers/modal-controller';
 import { t } from '@/i18n/locale';
 import { useProjectsStore } from '@/store/projects-store';
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 
 const props = defineProps({
-    option: {
-        type: Object,
-        required: true
-    },
     dialogueId: {
         type: String,
         required: true
@@ -83,27 +90,24 @@ const props = defineProps({
     sceneId: {
         type: String,
         required: true
+    },
+    optionId: {
+        type: String,
+        required: true
+    },
+    edge: {
+        type: Object,
+        required: false
     }
 });
 
 const projectStore = useProjectsStore();
+const project = projectStore.getProject(props.projectId);
+const scene = projectStore.getScene(props.projectId, props.sceneId);
+const dialogue = projectStore.getDialogue(props.projectId, props.sceneId, props.dialogueId);
+const option = projectStore.getOption(props.projectId, props.sceneId, props.dialogueId, props.optionId)!;
 
-const targetName = computed(() => {
-    if (!props.option.edge) return null;
-    const targetDialogue = useProjectsStore().getDialogue(props.projectId, props.sceneId, props.option.edge.target);
-    return targetDialogue ? targetDialogue.data.label : null;
-});
-
-const address = ref(props.option.condition?.address);
-const command = ref(props.option.condition?.command);
-
-// When address or command changes, update the option
-watch([address, command], () => {
-    props.option.condition = {
-        address: address.value,
-        command: command.value
-    };
-});
+const targetName = ref(determineTargetName());
 
 const commandList = DALI_COMMANDS;
 
@@ -130,8 +134,19 @@ const addressList = computed(() => {
     return allAddresses;
 });
 
+function determineTargetName() {
+    if (!props.edge) return null;
+    const targetDialogue = useProjectsStore().getDialogue(props.projectId, props.sceneId, props.edge.target);
+    return targetDialogue ? targetDialogue.data.label : null;
+}
+
+function onClickUnlinkOption() {
+    projectStore.removeEdge(props.projectId, props.sceneId, props.edge?.id);
+    targetName.value = null;
+}
+
 function onClickRemoveOption() {
-    projectStore.removeOption(props.projectId, props.sceneId, props.dialogueId, props.option.id);
+    projectStore.removeOption(props.projectId, props.sceneId, props.dialogueId, props.optionId);
     ModalController.close();
 }
 </script>
@@ -146,17 +161,16 @@ function onClickRemoveOption() {
     height: 100%;
 }
 
-section {
-    > p.with-inline-comboboxes {
-        display: flex;
-        align-items: center;
-        gap: 1.6rem;
-        margin-bottom: 1.6rem;
-        white-space: nowrap;
-        width: 100%;
-        > .combo-box {
-            min-width: 12rem;
-        }
+p.with-inline-comboboxes {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    margin-bottom: 1.6rem;
+    white-space: nowrap;
+    width: 100%;
+    > .combo-box {
+        min-width: 12rem;
     }
+    margin-bottom: 0;
 }
 </style>

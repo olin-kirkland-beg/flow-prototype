@@ -16,7 +16,6 @@
             <i class="fas fa-edit"></i>
             <span>{{ t('Project.Option-card.edit-option') }}</span>
         </Button>
-        <h4 class="ellipsis">{{ option.id }}</h4>
     </li>
 </template>
 
@@ -57,23 +56,13 @@ const targetName = computed(() => {
     return targetDialogue ? targetDialogue.data.label : null;
 });
 
-function onChangeTarget(newTargetId: string) {
-    if (!newTargetId) {
-        // Remove the target
-        // Determine the edge id
-        // const edgeId = options.value.find((option) => option.id === optionId)?.edge?.id;
-        // if (!edgeId) return;
-        // // Remove the edge from the scene
-        // projectStore.removeEdge(props.project.id, props.selectedScene?.id, edgeId);
-    }
-}
-
 function onClickEditOption() {
     ModalController.open(EditOptionModal, {
-        option: props.option,
         projectId: props.projectId,
         sceneId: props.sceneId,
-        dialogueId: props.dialogue.id
+        dialogueId: props.dialogue.id,
+        optionId: props.option.id,
+        edge: props.option.edge
     });
 }
 </script>
