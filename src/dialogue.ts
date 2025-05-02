@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 export type DialogueOption = {
     id: string; // UUID
     label: string; // Label for the option
-    condition: string | null; // Condition to show this option (null if no condition)
+    condition: { address: string; command: string } | null; // Condition to show this option (null if no condition)
 };
 
 export default class Dialogue {

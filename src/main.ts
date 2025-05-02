@@ -4,6 +4,7 @@ import { createPinia } from 'pinia';
 import { createApp } from 'vue';
 import App from './App.vue';
 import Card from './components/ui/Card.vue';
+import ComboBox from './components/ui/ComboBox.vue';
 import InputGroup from './components/ui/InputGroup.vue';
 import Link from './components/ui/Link.vue';
 import List from './components/ui/List.vue';
@@ -27,6 +28,7 @@ app.component('Card', Card);
 app.component('List', List);
 app.component('InputGroup', InputGroup);
 app.component('Link', Link);
+app.component('ComboBox', ComboBox);
 
 // Load projects from localStorage
 const projectsStore = useProjectsStore();

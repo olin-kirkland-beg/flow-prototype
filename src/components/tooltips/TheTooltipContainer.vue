@@ -135,22 +135,4 @@ onMounted(() => {
         opacity: 1;
     }
 }
-
-// Media queries
-@media (max-width: 768px) {
-    .tooltip {
-        min-width: 100%;
-        max-width: 100%;
-        height: 100vh;
-        height: 100dvh;
-        min-height: 100vh; // Old browsers
-        min-height: 100dvh; // New browsers
-        min-height: -webkit-fill-available; // iOS
-        max-height: 100vh; // Old browsers
-        max-height: 100dvh; // New browsers
-        max-height: -webkit-fill-available; // iOS
-        animation: none;
-        border-radius: 0;
-    }
-}
 </style>

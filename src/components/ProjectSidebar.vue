@@ -97,6 +97,7 @@ import { useProjectsStore } from '@/store/projects-store';
 import { getUniqueName } from '@/utils/naming-util';
 import ProjectSettingsModal from './modals/templates/ProjectSettingsModal.vue';
 import SceneSettingsModal from './modals/templates/SceneSettingsModal.vue';
+import { ref } from 'vue';
 
 const props = defineProps<{
     project: Project;
@@ -110,6 +111,7 @@ const emit = defineEmits<{
 }>();
 
 const projectsStore = useProjectsStore();
+const foo = ref('');
 
 function onClickOpenProjectSettings() {
     ModalController.open(ProjectSettingsModal, { project: props.project });
