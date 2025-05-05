@@ -97,17 +97,16 @@ export default class Project {
                 dialogue.data.options.forEach((option) => {
                     // Determine the target based on an edge
                     const connectedEdge: Edge | undefined = scene.edges.find((edge) => edge.sourceHandle === option.id);
-                    console.log(connectedEdge);
                     // Generate an id that can be reproduced for the condition
                     const generatedConditionId = hashString(
                         `${option.condition?.address}-${option.condition?.command}`
                     );
+
                     // Add the condition to the conditionsMap
                     conditionsMap[generatedConditionId] = option.condition;
 
                     if (connectedEdge) {
-                        // If the edge is found, use its targetHandle as the target
-                        const target = connectedEdge.targetHandle;
+                        const { target } = connectedEdge;
                         if (target) exportedState.on[generatedConditionId] = { target };
                         else console.error('Target handle not found for edge:', connectedEdge);
                     } else console.error('Edge not found for option:', option.id);
@@ -133,11 +132,14 @@ export default class Project {
         const zip = new JSZip();
         exportedScenes.forEach((scene) => {
             const folder = zip.folder(toFileName(scene.name));
-            if (!folder) return; // Skip if folder creation fails
-            console.error('Folder creation failed for scene:', scene.name);
-            folder.file('meta.md', `# ${scene.name}\n\n${scene.description}`);
-            folder.file('conditions-map.json', JSON.stringify(scene.conditionsMap, null, 2));
-            folder.file('flow.json', JSON.stringify(scene.flow, null, 2));
+            if (!folder) {
+                // Skip if folder creation fails
+                console.error('Folder creation failed for scene:', scene.name);
+            } else {
+                folder.file('meta.md', `# ${scene.name}\n\n${scene.description}`);
+                folder.file('conditions-map.json', JSON.stringify(scene.conditionsMap, null, 2));
+                folder.file('flow.json', JSON.stringify(scene.flow, null, 2));
+            }
         });
 
         // Create a meta file for the project
@@ -159,5 +161,7 @@ export default class Project {
             .catch((error) => {
                 console.error('Error generating zip file:', error);
             });
+
+        console.log('Export complete!');
     }
 }

@@ -7,6 +7,5 @@ import { v5 as uuidv5 } from 'uuid';
  * @returns A string representing the hash of the input string.
  */
 export function hashString(str: string): string {
-    console.log('Hashing string:', str);
-    return uuidv5(str, 'flow-prototype');
+    return uuidv5(str, 'f0c4b2a8-1d3e-4f7b-9c6d-0a2e1f3b5c8d'); // Use a fixed namespace for consistency
 }
