@@ -98,6 +98,11 @@ ul {
     background: var(--color-background);
 }
 
+:deep(input) {
+    width: 100%;
+    padding-right: 1.6rem !important;
+}
+
 .combo-box-transition-enter-active {
     animation: slide-in 0.2s ease-out;
 }

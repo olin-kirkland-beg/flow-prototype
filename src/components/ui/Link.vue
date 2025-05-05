@@ -11,6 +11,7 @@ span.link {
     display: inline;
     color: var(--color-primary);
     cursor: pointer;
+    white-space: nowrap;
 
     * {
         color: inherit;

@@ -66,6 +66,32 @@
                     <Card>
                         <div class="flex spread full-width">
                             <div>
+                                <h3>{{ t('Modals.Project-settings.Export.title') }}</h3>
+                                <p>{{ t('Modals.Project-settings.Export.description') }}</p>
+                            </div>
+                            <Button
+                                @click="onClickExportProjectForDaliSys"
+                                @mouseover="
+                                    TooltipController.open(InfoTooltip, {
+                                        html: `${toFileName(project.name)}.zip`,
+                                        target: $event.currentTarget,
+                                        position: 'bottom'
+                                    })
+                                "
+                            >
+                                <i class="fas fa-file-download"></i>
+                                <span>
+                                    {{ t('Modals.Project-settings.Export.button') }}
+                                </span>
+                            </Button>
+                        </div>
+                    </Card>
+                </section>
+
+                <section>
+                    <Card>
+                        <div class="flex spread full-width">
+                            <div>
                                 <h3>{{ t('Modals.Project-settings.Delete-project.title') }}</h3>
                                 <p>{{ t('Modals.Project-settings.Delete-project.description') }}</p>
                             </div>
@@ -117,6 +143,10 @@ const props = defineProps<{
 
 function onClickSaveProjectToFile() {
     Project.saveToFile(toFileName(props.project.name), props.project);
+}
+
+function onClickExportProjectForDaliSys() {
+    Project.exportForDaliSys(toFileName(props.project.name), props.project);
 }
 
 function onClickDeleteProject() {

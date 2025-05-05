@@ -15,22 +15,39 @@
                 </section>
                 <Card overflow>
                     <!-- Condition -->
-                    <p class="with-inline-comboboxes">
-                        {{ t('Modals.Edit-option.condition-description-1') }}
-                        <ComboBox
-                            v-model="option.condition!.address"
-                            :options="addressList"
-                            :placeholder="t('Modals.Edit-option.address-placeholder')"
-                        >
-                            {{ t('Modals.Edit-option.address') }}
-                        </ComboBox>
-                        {{ t('Modals.Edit-option.condition-description-2') }}
-                        <ComboBox
-                            v-model="option.condition!.command"
-                            :options="commandList"
-                            :placeholder="t('Modals.Edit-option.command-placeholder')"
-                        ></ComboBox>
-                    </p>
+                    <div class="with-inline-combo-boxes">
+                        <p>{{ t('Modals.Edit-option.condition-description-1') }}</p>
+                        <div class="combo-box-details combo-box-details--address">
+                            <ComboBox
+                                v-model="option.condition!.address"
+                                :options="addressList"
+                                :placeholder="t('Modals.Edit-option.address-placeholder')"
+                            >
+                                {{ t('Modals.Edit-option.address') }}
+                            </ComboBox>
+                        </div>
+                        <p>{{ t('Modals.Edit-option.condition-description-2') }}</p>
+                        <div class="combo-box-details combo-box-details--command">
+                            <ComboBox
+                                v-model="option.condition!.command"
+                                :options="commandList"
+                                :placeholder="t('Modals.Edit-option.command-placeholder')"
+                            >
+                                {{ t('Modals.Edit-option.command') }}
+                            </ComboBox>
+                            <Transition name="shelf-transition" mode="out-in">
+                                <div class="details" v-if="commandReadableName && commandReadableDescription">
+                                    <i class="fas fa-info-circle"></i>
+                                    <div>
+                                        <p>
+                                            <strong>{{ t(commandReadableName) }}</strong>
+                                        </p>
+                                        <p>{{ t(commandReadableDescription) }}</p>
+                                    </div>
+                                </div>
+                            </Transition>
+                        </div>
+                    </div>
                 </Card>
                 <Card>
                     <!-- Choose target -->
@@ -109,7 +126,21 @@ const option = projectStore.getOption(props.projectId, props.sceneId, props.dial
 
 const targetName = ref(determineTargetName());
 
-const commandList = DALI_COMMANDS;
+const commandList = DALI_COMMANDS.map((command) => ({
+    value: command.value,
+    label: command.value
+}));
+
+const commandReadableName = computed(() => {
+    const commandLabel = DALI_COMMANDS.find((cmd) => cmd.value === option.condition?.command)?.label;
+    if (!commandLabel) return null;
+    return `DALI-commands-readable.${commandLabel}.label`;
+});
+const commandReadableDescription = computed(() => {
+    const commandDescription = DALI_COMMANDS.find((cmd) => cmd.value === option.condition?.command)?.label;
+    if (!commandDescription) return null;
+    return `DALI-commands-readable.${commandDescription}.description`;
+});
 
 const addressList = computed(() => {
     // Get all the addresses from this project
@@ -154,23 +185,57 @@ function onClickRemoveOption() {
 <style scoped lang="scss">
 .edit-option {
     display: flex;
-    max-width: 64rem;
+    max-width: 72rem;
     flex-direction: column;
     gap: 1.6rem;
     justify-content: space-between;
     height: 100%;
 }
 
-p.with-inline-comboboxes {
+.with-inline-combo-boxes {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 1.6rem;
     margin-bottom: 1.6rem;
     white-space: nowrap;
     width: 100%;
-    > .combo-box {
-        min-width: 12rem;
-    }
     margin-bottom: 0;
+    > p {
+        margin-top: 0.6rem;
+    }
+
+    .combo-box-details {
+        .details {
+            overflow: hidden;
+            display: flex;
+            gap: 0.8rem;
+            width: 100%;
+            padding: 0.8rem;
+            align-items: center;
+
+            > i {
+                font-size: 2rem;
+            }
+        }
+
+        &--address {
+            max-width: 22rem;
+        }
+
+        // &--command {
+        // }
+    }
+}
+
+// Shelf Transition
+.shelf-transition-enter-active,
+.shelf-transition-leave-active {
+    transition: all 0.2s ease;
+    max-height: 10rem;
+}
+
+.shelf-transition-enter-from,
+.shelf-transition-leave-to {
+    max-height: 0;
 }
 </style>
