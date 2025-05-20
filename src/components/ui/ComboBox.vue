@@ -57,7 +57,6 @@ const emit = defineEmits<{
 }>();
 
 function onInput(event: Event) {
-    console.log('onInput', event);
     const target = event.target as HTMLInputElement;
     emit('update:modelValue', target.value);
     matcher.value = target.value;
