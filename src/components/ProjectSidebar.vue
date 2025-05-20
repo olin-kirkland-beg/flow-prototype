@@ -137,6 +137,10 @@ function onClickAddScene() {
 function onClickAddDialogue() {
     if (!props.selectedScene) return;
     const newDialogue = new Dialogue();
+    newDialogue.data.label = getUniqueName(
+        props.selectedScene.dialogues.map((dialogue) => dialogue.data.label),
+        t('Project.new-dialogue-name')
+    );
     projectsStore.addDialogue(props.project.id, props.selectedScene.id, newDialogue);
 }
 
