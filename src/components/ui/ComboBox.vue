@@ -7,12 +7,10 @@
             @blur="isFocused = false"
             @input="onInput"
             :modelValue="props.modelValue"
+            @update:modelValue="onUpdateModelValue"
         >
             <slot></slot>
         </InputGroup>
-        <Button icon @click="onClickClear" class="clear-button" v-if="props.modelValue">
-            <i class="fas fa-times"></i>
-        </Button>
         <Transition name="combo-box-transition">
             <List v-if="isFocused && matchingOptions.length">
                 <li
@@ -59,16 +57,14 @@ const emit = defineEmits<{
 }>();
 
 function onInput(event: Event) {
+    console.log('onInput', event);
     const target = event.target as HTMLInputElement;
     emit('update:modelValue', target.value);
     matcher.value = target.value;
 }
 
-function onClickClear() {
-    emit('update:modelValue', '');
-    matcher.value = '';
-    const inputEl = inputGroupRef.value?.$el.querySelector('input');
-    inputEl?.focus();
+function onUpdateModelValue(value: string) {
+    emit('update:modelValue', value);
 }
 </script>
 
@@ -80,13 +76,6 @@ function onClickClear() {
     flex-direction: column;
 }
 
-button.clear-button {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
 ul {
     position: absolute;
     z-index: 1;
@@ -96,11 +85,6 @@ ul {
     width: 100%;
     max-height: 16rem;
     background: var(--color-background);
-}
-
-:deep(input) {
-    width: 100%;
-    padding-right: 1.6rem !important;
 }
 
 .combo-box-transition-enter-active {

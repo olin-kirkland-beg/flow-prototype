@@ -15,25 +15,24 @@
                 </section>
                 <Card overflow>
                     <!-- Condition -->
-                    <div class="with-inline-combo-boxes">
-                        <p>{{ t('Modals.Edit-option.condition-description-1') }}</p>
+                    <p v-html="t('Modals.Edit-option.Condition.instructions')"></p>
+                    <div class="condition-inputs">
                         <div class="combo-box-details combo-box-details--address">
                             <ComboBox
                                 v-model="option.condition!.address"
                                 :options="addressList"
-                                :placeholder="t('Modals.Edit-option.address-placeholder')"
+                                :placeholder="t('Modals.Edit-option.Condition.address-placeholder')"
                             >
-                                {{ t('Modals.Edit-option.address') }}
+                                {{ t('Modals.Edit-option.Condition.address') }}
                             </ComboBox>
                         </div>
-                        <p>{{ t('Modals.Edit-option.condition-description-2') }}</p>
                         <div class="combo-box-details combo-box-details--command">
                             <ComboBox
                                 v-model="option.condition!.command"
                                 :options="commandList"
-                                :placeholder="t('Modals.Edit-option.command-placeholder')"
+                                :placeholder="t('Modals.Edit-option.Condition.command-placeholder')"
                             >
-                                {{ t('Modals.Edit-option.command') }}
+                                {{ t('Modals.Edit-option.Condition.command') }}
                             </ComboBox>
                             <Transition name="shelf-transition" mode="out-in">
                                 <div class="details" v-if="commandReadableName && commandReadableDescription">
@@ -192,17 +191,13 @@ function onClickRemoveOption() {
     height: 100%;
 }
 
-.with-inline-combo-boxes {
+.condition-inputs {
     display: flex;
     align-items: flex-start;
     gap: 1.6rem;
-    margin-bottom: 1.6rem;
     white-space: nowrap;
     width: 100%;
     margin-bottom: 0;
-    > p {
-        margin-top: 0.6rem;
-    }
 
     .combo-box-details {
         .details {
