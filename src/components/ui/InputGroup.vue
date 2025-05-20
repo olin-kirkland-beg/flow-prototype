@@ -124,7 +124,6 @@ function onPressEnterKey() {
         overflow: hidden;
         height: 100%;
         background-color: transparent;
-        color: var(--color-primary);
 
         &:focus {
             outline: none;
