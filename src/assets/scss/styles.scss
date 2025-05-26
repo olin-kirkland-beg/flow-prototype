@@ -44,14 +44,14 @@ p {
 pre {
     border-left: 0.4rem solid var(--color-orange);
     text-align: left;
-    padding: 1rem;
+    padding-left: 1rem;
     overflow: auto;
     white-space: pre-wrap;
     word-wrap: break-word;
     font-size: 1.2rem;
     line-height: 1.5;
     font-family: monospace;
-    min-height: 3.8rem;
+    height: fit-content;
 }
 
 .muted {
@@ -106,4 +106,17 @@ i {
 
 :focus {
     outline: none;
+}
+
+br {
+    display: block;
+    content: '';
+    margin: 0.4rem 0;
+}
+
+.card.list {
+    padding: 0;
+    > *:not(:last-child) {
+        border-bottom: 0.1rem solid var(--color-surface-alt);
+    }
 }

@@ -158,6 +158,14 @@ const addressList = computed(() => {
                     });
                 }
             });
+            dialogue.data.actions.forEach((action) => {
+                if (action.address && !allAddresses.some((address) => address.value === action.address)) {
+                    allAddresses.push({
+                        value: action.address,
+                        label: action.address
+                    });
+                }
+            });
         });
     });
 

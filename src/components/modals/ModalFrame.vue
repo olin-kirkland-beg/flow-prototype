@@ -1,5 +1,5 @@
 <template>
-    <div class="modal">
+    <div class="modal" :class="{ overflow: props.overflow }">
         <slot name="header"></slot>
         <div class="modal__content">
             <slot name="content"></slot>
@@ -8,7 +8,14 @@
     </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const props = defineProps({
+    overflow: {
+        type: Boolean,
+        default: false
+    }
+});
+</script>
 
 <style lang="scss" scoped>
 .modal {

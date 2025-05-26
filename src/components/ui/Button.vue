@@ -3,6 +3,7 @@
         class="btn"
         :class="{
             'btn--icon': icon,
+            'btn--mini': mini,
             'btn--primary': primary,
             'btn--danger': danger,
             'btn--disabled': disabled,
@@ -20,6 +21,7 @@ import { defineProps } from 'vue';
 
 const props = defineProps({
     icon: Boolean,
+    mini: Boolean,
     primary: Boolean,
     danger: Boolean,
     disabled: Boolean,
@@ -113,14 +115,23 @@ button {
     }
 }
 
+// Mini
+.btn.btn--mini {
+    .btn__content {
+        height: auto;
+        width: auto;
+        padding: 0.2rem;
+    }
+}
+
 // Disabled
 .btn--disabled {
     pointer-events: none;
-    border: none;
+    border-color: transparent;
     opacity: 0.8;
 
     .btn__content {
-        border: none;
+        border-color: transparent;
         background-color: none;
         * {
             opacity: 0.5;

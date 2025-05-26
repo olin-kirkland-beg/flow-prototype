@@ -19,7 +19,7 @@
             </InputGroup>
 
             <Button @click="onClickOpenActionsModal" full-width>
-                <i class="fas fa-edit"></i>
+                <i class="fas fa-list"></i>
                 <span>{{ t('Project.State-sidebar.actions') }}</span>
             </Button>
 
@@ -56,6 +56,7 @@
 </template>
 
 <script setup lang="ts">
+import ModalController from '@/controllers/modal-controller';
 import Dialogue, { DialogueOption } from '@/dialogue';
 import { t } from '@/i18n/locale';
 import Project from '@/project';
@@ -65,6 +66,7 @@ import { getUniqueName } from '@/utils/naming-util';
 import { Edge } from '@vue-flow/core';
 import { v4 as uuid } from 'uuid';
 import { computed } from 'vue';
+import ActionsModal from './modals/templates/ActionsModal.vue';
 import OptionListItem from './OptionListItem.vue';
 import InputGroup from './ui/InputGroup.vue';
 
@@ -102,6 +104,14 @@ const options = computed(() => {
 
     return optionsWithEdges;
 });
+
+function onClickOpenActionsModal() {
+    if (!props.selectedDialogue) return;
+    ModalController.open(ActionsModal, {
+        projectId: props.project.id,
+        dialogue: props.selectedDialogue
+    });
+}
 
 function onClickCloseDialogue() {
     emit('deselectDialogue');
