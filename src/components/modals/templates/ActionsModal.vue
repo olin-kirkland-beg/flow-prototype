@@ -166,16 +166,13 @@ function onClickAddAction() {
         command: ''
     };
 
-    // Scroll the .list to the bottom
-
-    console.log('Scrolling to bottom');
+    // TODO: Scroll the .list to the bottom
+    // console.log('Scrolling to bottom');
     if (listEl.value) {
-        console.log(listEl.value);
-        console.log('Scroll height:', listEl.value.scrollHeight);
-        console.log('Client height:', listEl.value.clientHeight);
-        listEl.value.scrollTop = listEl.value.scrollHeight;
-        listEl.value.style.scrollBehavior = 'smooth';
-
+        // console.log(listEl.value);
+        // console.log('Scroll height:', listEl.value.scrollHeight);
+        // console.log('Client height:', listEl.value.clientHeight);
+        // listEl.value.scrollTop = listEl.value.scrollHeight;
         // Ensure the scroll is smooth
     }
 }

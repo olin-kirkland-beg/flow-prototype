@@ -21,10 +21,7 @@
                 v-on:drag="dialogueNodeProps.onDrag"
                 v-on:dragend="dialogueNodeProps.setPosition"
             >
-                <DialogueNode
-                    v-bind="dialogueNodeProps"
-                    :seekingNodeId="seekingNodeId"
-                />
+                <DialogueNode v-bind="dialogueNodeProps" :seekingNodeId="seekingNodeId" />
             </template>
 
             <template #connection-line="props">
@@ -69,15 +66,7 @@ import { PageName, router } from '@/router';
 import Scene from '@/scene';
 import { useProjectsStore } from '@/store/projects-store';
 import { Background } from '@vue-flow/background';
-import {
-    Connection,
-    ConnectionMode,
-    Edge,
-    NodeChange,
-    useVueFlow,
-    VueFlow,
-    VueFlowStore
-} from '@vue-flow/core';
+import { Connection, ConnectionMode, Edge, NodeChange, useVueFlow, VueFlow, VueFlowStore } from '@vue-flow/core';
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import DialogueSidebar from '../DialogueSidebar.vue';
@@ -92,9 +81,7 @@ const flowInstance = ref<VueFlowStore | null>(null);
 
 const projectsStore = useProjectsStore();
 const projectId = ref<string | null>((route.params.id as string) || null);
-const project = ref<Project | null>(
-    projectsStore.getProject(projectId.value as string) || null
-);
+const project = ref<Project | null>(projectsStore.getProject(projectId.value as string) || null);
 
 const selectedScene = ref<Scene | null>(null);
 const selectedDialogue = ref<Dialogue | null>(null);
@@ -123,6 +110,20 @@ watch(
         newProject.updatedAt = Date.now();
     },
     { deep: true }
+);
+
+// Watch for changes to the scenes in the project, and update the selectedScene if it no longer exists
+watch(
+    () => project.value?.scenes.map((scene) => scene.id),
+    (sceneIds) => {
+        if (!selectedScene.value) return;
+
+        console.log('Watching project scenes', sceneIds, selectedScene.value.id);
+        if (!sceneIds?.includes(selectedScene.value.id)) {
+            selectedScene.value = null;
+            flowInstance.value?.setNodes([]);
+        }
+    }
 );
 
 // Update a node when any of its data changes
@@ -164,9 +165,7 @@ function applyFlowToProject() {
     const projectObject = toObject();
     project.value.scenes.forEach((scene) => {
         scene.dialogues.forEach((dialogue) => {
-            const node = projectObject.nodes.find(
-                (node) => node.id === dialogue.id
-            );
+            const node = projectObject.nodes.find((node) => node.id === dialogue.id);
             if (node) {
                 dialogue.position = node.position;
                 dialogue.data = node.data;
@@ -189,9 +188,7 @@ function onNodesChange(changes: NodeChange[]) {
                 const selectedNode = flowInstance.value?.getNode(change.id);
                 if (!selectedNode) return;
 
-                const dialogue = selectedScene.value?.dialogues.find(
-                    (dialogue) => dialogue.id === selectedNode.id
-                );
+                const dialogue = selectedScene.value?.dialogues.find((dialogue) => dialogue.id === selectedNode.id);
 
                 if (!dialogue) return;
                 setTimeout(() => {
@@ -215,11 +212,7 @@ function selectScene(scene: Scene) {
 
 function selectDialogueById(id: string) {
     if (!selectedScene.value) return;
-    const dialogue = projectsStore.getDialogue(
-        project.value!.id,
-        selectedScene.value.id,
-        id
-    );
+    const dialogue = projectsStore.getDialogue(project.value!.id, selectedScene.value.id, id);
     if (!dialogue) return;
     selectDialogue(dialogue);
 }
@@ -252,21 +245,14 @@ function panToNode(id: string) {
     if (!node) return;
 
     // Pan to the node's center
-    const leftSidebarOffsetX =
-        ((document.querySelector('.sidebar--left')?.clientWidth || 0) + 32) / 2;
+    const leftSidebarOffsetX = ((document.querySelector('.sidebar--left')?.clientWidth || 0) + 32) / 2;
 
-    const rightSidebarOffsetX =
-        ((document.querySelector('.sidebar--right')?.clientWidth || 0) + 32) /
-        2;
+    const rightSidebarOffsetX = ((document.querySelector('.sidebar--right')?.clientWidth || 0) + 32) / 2;
 
     const centerOffsetX = (node.dimensions.width as number) / 2;
     const centerOffsetY = (node.dimensions.height as number) / 2;
     const center = {
-        x:
-            node.position.x +
-            centerOffsetX -
-            leftSidebarOffsetX +
-            rightSidebarOffsetX,
+        x: node.position.x + centerOffsetX - leftSidebarOffsetX + rightSidebarOffsetX,
         y: node.position.y + centerOffsetY
     };
     flowInstance.value.setCenter(center.x, center.y, {
@@ -283,13 +269,7 @@ function onConnect(params: Edge | Connection) {
     const targetNodeId = edge.target;
     if (!sourceOptionId) return;
 
-    useProjectsStore().addEdge(
-        project.value!.id,
-        selectedScene.value!.id,
-        sourceNodeId,
-        sourceOptionId,
-        targetNodeId
-    );
+    useProjectsStore().addEdge(project.value!.id, selectedScene.value!.id, sourceNodeId, sourceOptionId, targetNodeId);
 }
 </script>
 
