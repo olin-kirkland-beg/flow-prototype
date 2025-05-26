@@ -18,6 +18,16 @@
                     <p v-html="t('Modals.Edit-option.Condition.instructions')"></p>
                     <div class="condition-inputs">
                         <div class="combo-box-details combo-box-details--address">
+                            <ul class="suggestion-options">
+                                <li
+                                    v-for="value in ['off', 'all']"
+                                    :key="value"
+                                    :class="{ selected: addressSuggestions === value }"
+                                    @click="addressSuggestions = value"
+                                >
+                                    {{ t(`Modals.Edit-option.Suggestions.${value}`) }}
+                                </li>
+                            </ul>
                             <ComboBox
                                 v-model="option.condition!.address"
                                 :options="addressList"
@@ -27,6 +37,16 @@
                             </ComboBox>
                         </div>
                         <div class="combo-box-details combo-box-details--command">
+                            <ul class="suggestion-options">
+                                <li
+                                    v-for="value in ['off', 'all']"
+                                    :key="value"
+                                    :class="{ selected: commandSuggestions === value }"
+                                    @click="commandSuggestions = value"
+                                >
+                                    {{ t(`Modals.Edit-option.Suggestions.${value}`) }}
+                                </li>
+                            </ul>
                             <ComboBox
                                 v-model="option.condition!.command"
                                 :options="commandList"
@@ -125,10 +145,8 @@ const option = projectStore.getOption(props.projectId, props.sceneId, props.dial
 
 const targetName = ref(determineTargetName());
 
-const commandList = DALI_COMMANDS.map((command) => ({
-    value: command.value,
-    label: command.value
-}));
+const addressSuggestions = ref('all');
+const commandSuggestions = ref('all');
 
 const commandReadableName = computed(() => {
     const commandLabel = DALI_COMMANDS.find((cmd) => cmd.value === option.condition?.command)?.label;
@@ -169,7 +187,16 @@ const addressList = computed(() => {
         });
     });
 
-    return allAddresses;
+    return addressSuggestions.value === 'all' ? allAddresses : [];
+});
+
+const commandList = computed(() => {
+    const commands = DALI_COMMANDS.map((command) => ({
+        value: command.value,
+        label: command.value
+    }));
+
+    return commandSuggestions.value === 'all' ? commands : [];
 });
 
 function determineTargetName() {
@@ -240,5 +267,20 @@ function onClickRemoveOption() {
 .shelf-transition-enter-from,
 .shelf-transition-leave-to {
     max-height: 0;
+}
+
+.suggestion-options {
+    display: flex;
+    padding: 0.2rem;
+    gap: 0.4rem;
+    justify-content: flex-end;
+    > li {
+        cursor: pointer;
+        font-size: 1.2rem;
+        opacity: 0.4;
+        &.selected {
+            opacity: 1;
+        }
+    }
 }
 </style>
