@@ -200,6 +200,7 @@ function onClickRemoveOption() {
     margin-bottom: 0;
 
     .combo-box-details {
+        flex: 1;
         .details {
             overflow: hidden;
             display: flex;
@@ -213,9 +214,8 @@ function onClickRemoveOption() {
             }
         }
 
-        &--address {
-            max-width: 22rem;
-        }
+        // &--address {
+        // }
 
         // &--command {
         // }

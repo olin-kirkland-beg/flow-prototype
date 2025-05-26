@@ -1,16 +1,20 @@
 <template>
     <li class="option-list-item">
-        <p>{{ option.label }}</p>
-        <div class="connected-node">
-            <span v-if="option.edge">
-                {{ t('Project.State-sidebar.connected-to') }}
-                <Link @click="emit('selectDialogue', option.edge.target)">
-                    {{ targetName }}
-                </Link>
-            </span>
-            <span v-else>
-                {{ t('Project.State-sidebar.not-connected') }}
-            </span>
+        <div>
+            <p>
+                <strong>{{ option.label }}</strong>
+            </p>
+            <div class="connected-node">
+                <span v-if="option.edge">
+                    {{ t('Project.State-sidebar.connected-to') }}
+                    <Link @click="emit('selectDialogue', option.edge.target)">
+                        {{ targetName }}
+                    </Link>
+                </span>
+                <span v-else>
+                    {{ t('Project.State-sidebar.not-connected') }}
+                </span>
+            </div>
         </div>
         <Button @click="onClickEditOption">
             <i class="fas fa-edit"></i>
@@ -70,8 +74,19 @@ function onClickEditOption() {
 <style scoped lang="scss">
 .option-list-item {
     display: flex;
-    flex-direction: column;
     gap: 0.4rem;
     padding: 1.2rem;
+    cursor: unset;
+
+    > div {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        gap: 0.4rem;
+    }
+
+    .connected-node {
+        font-style: italic;
+    }
 }
 </style>

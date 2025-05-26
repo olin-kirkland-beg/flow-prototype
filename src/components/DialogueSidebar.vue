@@ -18,6 +18,11 @@
                 <span>{{ t('Project.State-sidebar.name') }}</span>
             </InputGroup>
 
+            <Button @click="onClickOpenActionsModal" full-width>
+                <i class="fas fa-edit"></i>
+                <span>{{ t('Project.State-sidebar.actions') }}</span>
+            </Button>
+
             <!-- Add Option button -->
             <Button @click="onClickAddOption" full-width>
                 <i class="fas fa-plus"></i>
@@ -26,7 +31,7 @@
 
             <!-- List of options -->
             <List class="options">
-                <li v-if="options.length === 0">
+                <li v-if="options.length === 0" class="empty">
                     <em> {{ t('Project.State-sidebar.no-options') }} </em>
                 </li>
 
@@ -165,17 +170,12 @@ section {
 
     > li {
         width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.8rem;
-        cursor: unset;
+    }
 
-        > span {
-            text-overflow: ellipsis;
-            overflow: hidden;
-            width: 100%;
-        }
+    > li.empty {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        width: 100%;
     }
 }
 
