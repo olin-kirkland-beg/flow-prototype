@@ -39,7 +39,7 @@
                         <div class="combo-box-details combo-box-details--command">
                             <ul class="suggestion-options">
                                 <li
-                                    v-for="value in ['off', 'all']"
+                                    v-for="value in ['off', 'control', 'push-button', 'all']"
                                     :key="value"
                                     :class="{ selected: commandSuggestions === value }"
                                     @click="commandSuggestions = value"
@@ -103,7 +103,8 @@
 </template>
 
 <script setup lang="ts">
-import DALI_COMMANDS from '@/assets/data/dali-commands.json';
+import COMMANDS_BY_DEVICE_TYPE from '@/assets/data/commands-by-device-type.json';
+import COMMANDS from '@/assets/data/commands.json';
 import ModalFrame from '@/components/modals/ModalFrame.vue';
 import ModalHeader from '@/components/modals/ModalHeader.vue';
 import Card from '@/components/ui/Card.vue';
@@ -137,6 +138,12 @@ const props = defineProps({
     }
 });
 
+const PUSH_BUTTON_COMMANDS = COMMANDS_BY_DEVICE_TYPE['push-button'].map(
+    (cmd) => COMMANDS.find((c) => c.value === cmd)!
+);
+
+const CONTROL_COMMANDS = COMMANDS_BY_DEVICE_TYPE['control'].map((cmd) => COMMANDS.find((c) => c.value === cmd)!);
+
 const projectStore = useProjectsStore();
 const project = projectStore.getProject(props.projectId);
 const scene = projectStore.getScene(props.projectId, props.sceneId);
@@ -149,12 +156,16 @@ const addressSuggestions = ref('all');
 const commandSuggestions = ref('all');
 
 const commandReadableName = computed(() => {
-    const commandLabel = DALI_COMMANDS.find((cmd) => cmd.value === option.condition?.command)?.label;
+    const commandLabel = COMMANDS.find(
+        (cmd: { value: string; label: string }) => cmd.value === option.condition?.command
+    )?.label;
     if (!commandLabel) return null;
     return `DALI-commands-readable.${commandLabel}.label`;
 });
 const commandReadableDescription = computed(() => {
-    const commandDescription = DALI_COMMANDS.find((cmd) => cmd.value === option.condition?.command)?.label;
+    const commandDescription = COMMANDS.find(
+        (cmd: { value: string; label: string }) => cmd.value === option.condition?.command
+    )?.label;
     if (!commandDescription) return null;
     return `DALI-commands-readable.${commandDescription}.description`;
 });
@@ -191,12 +202,28 @@ const addressList = computed(() => {
 });
 
 const commandList = computed(() => {
-    const commands = DALI_COMMANDS.map((command) => ({
-        value: command.value,
-        label: command.value
-    }));
+    let commands: any[] = [];
+    switch (commandSuggestions.value) {
+        case 'all':
+            commands = COMMANDS;
+            break;
+        case 'push-button':
+            commands = PUSH_BUTTON_COMMANDS;
+            break;
+        case 'control':
+            commands = CONTROL_COMMANDS;
+            break;
+        case 'off':
+            commands = [];
+            break;
+        default:
+            break;
+    }
 
-    return commandSuggestions.value === 'all' ? commands : [];
+    return commands.map((cmd) => ({
+        value: cmd.value,
+        label: cmd.value
+    }));
 });
 
 function determineTargetName() {
@@ -219,7 +246,7 @@ function onClickRemoveOption() {
 <style scoped lang="scss">
 .edit-option {
     display: flex;
-    max-width: 72rem;
+    max-width: 92rem;
     flex-direction: column;
     gap: 1.6rem;
     justify-content: space-between;
@@ -271,7 +298,7 @@ function onClickRemoveOption() {
 
 .suggestion-options {
     display: flex;
-    padding: 0.2rem;
+    padding: 0.4rem;
     gap: 0.4rem;
     justify-content: flex-end;
     > li {

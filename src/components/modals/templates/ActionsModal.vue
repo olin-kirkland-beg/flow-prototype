@@ -80,7 +80,7 @@
 </template>
 
 <script setup lang="ts">
-import DALI_COMMANDS from '@/assets/data/dali-commands.json';
+import COMMANDS from '@/assets/data/commands.json';
 import ModalFrame from '@/components/modals/ModalFrame.vue';
 import ModalHeader from '@/components/modals/ModalHeader.vue';
 import Card from '@/components/ui/Card.vue';
@@ -139,19 +139,19 @@ const addressList = computed(() => {
     return allAddresses;
 });
 
-const commandList = DALI_COMMANDS.map((command) => ({
+const commandList = COMMANDS.map((command) => ({
     value: command.value,
     label: command.value
 }));
 
 function getCommandReadableName(commandValue: string) {
-    const commandLabel = DALI_COMMANDS.find((cmd) => cmd.value === commandValue)?.label;
+    const commandLabel = COMMANDS.find((cmd) => cmd.value === commandValue)?.label;
     if (!commandLabel) return null;
     return `DALI-commands-readable.${commandLabel}.label`;
 }
 
 function getCommandReadableDescription(commandValue: string) {
-    const commandDescription = DALI_COMMANDS.find((cmd) => cmd.value === commandValue)?.label;
+    const commandDescription = COMMANDS.find((cmd) => cmd.value === commandValue)?.label;
     if (!commandDescription) return null;
     return `DALI-commands-readable.${commandDescription}.description`;
 }

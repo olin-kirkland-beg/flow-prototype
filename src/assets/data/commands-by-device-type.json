@@ -1,0 +1,25 @@
+{
+    "push-button": ["BUTTON_RELEASED", "BUTTON_PRESSED", "SHORT_PRESS", "LONG_PRESS_START", "LONG_PRESS_STOP"],
+    "control": [
+        "DIRECT_ARC_POWER_CONTROL",
+        "OFF",
+        "RECALL_MAX_LEVEL",
+        "RECALL_MIN_LEVEL",
+        "GO_T0_SCENE0",
+        "GO_T0_SCENE1",
+        "GO_T0_SCENE2",
+        "GO_T0_SCENE3",
+        "GO_T0_SCENE4",
+        "GO_T0_SCENE5",
+        "GO_T0_SCENE6",
+        "GO_T0_SCENE7",
+        "GO_T0_SCENE8",
+        "GO_T0_SCENE9",
+        "GO_T0_SCENE10",
+        "GO_T0_SCENE11",
+        "GO_T0_SCENE12",
+        "GO_T0_SCENE13",
+        "GO_T0_SCENE14",
+        "GO_T0_SCENE15"
+    ]
+}
