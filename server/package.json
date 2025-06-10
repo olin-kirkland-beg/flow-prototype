@@ -1,0 +1,35 @@
+{
+    "name": "flow-prototype-server",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "type": "commonjs",
+    "scripts": {
+        "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/index.ts",
+        "build": "tsc",
+        "start": "node dist/index.js"
+    },
+    "author": "Olin Kirkland",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/chalk": "^0.4.31",
+        "@types/dotenv": "^8.2.3",
+        "@types/node": "^22.15.23",
+        "@types/redis": "^4.0.11",
+        "@types/uuid": "^10.0.0",
+        "@types/ws": "^8.18.1",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.8.3"
+    },
+    "dependencies": {
+        "@types/cors": "^2.8.18",
+        "chalk": "^5.4.1",
+        "cors": "^2.8.5",
+        "dotenv": "^16.5.0",
+        "prettier": "^3.5.3",
+        "redis": "^4.7.1",
+        "tsconfig-paths": "^4.2.0",
+        "uuid": "^11.1.0",
+        "ws": "^8.18.2"
+    }
+}
