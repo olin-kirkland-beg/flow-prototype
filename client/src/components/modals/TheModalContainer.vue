@@ -1,14 +1,7 @@
 <template>
     <div class="modal-container" :class="{ active: !!currentModal }">
-        <div
-            class="modal-container__background"
-            @click="onClickBackground()"
-        ></div>
-        <component
-            :is="currentModal"
-            v-bind="currentModalConfig"
-            ref="modalRef"
-        />
+        <div class="modal-container__background" @click="onClickBackground()"></div>
+        <component :is="currentModal" v-bind="currentModalConfig" ref="modalRef" />
     </div>
 </template>
 
@@ -43,15 +36,10 @@ ModalController.getInstance().addEventListener(({ modal, modalConfig }) => {
     // Open
     if (currentModal.value) {
         // If a matching modalConfig is already in the queue, don't add it again
-        const queueIncludingCurrent = [
-            ...queue,
-            { modal: currentModal.value, modalConfig: currentModalConfig.value }
-        ];
+        const queueIncludingCurrent = [...queue, { modal: currentModal.value, modalConfig: currentModalConfig.value }];
 
         const isModalAlreadyInQueue = queueIncludingCurrent.find(
-            (queued) =>
-                JSON.stringify(queued.modalConfig) ===
-                JSON.stringify(modalConfig)
+            (queued) => JSON.stringify(queued.modalConfig) === JSON.stringify(modalConfig)
         );
 
         if (isModalAlreadyInQueue) return;
@@ -120,7 +108,8 @@ ModalController.getInstance().addEventListener(({ modal, modalConfig }) => {
 }
 
 .modal {
-    max-height: calc(100vh - 4rem);
+    max-width: calc(100dvw - 4rem);
+    max-height: calc(100dvh - 4rem);
 }
 
 // Media queries

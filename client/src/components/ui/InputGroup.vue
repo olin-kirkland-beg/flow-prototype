@@ -12,6 +12,7 @@
             autocomplete="off"
             @focus="showClearButton = true"
             @blur="onBlur"
+            :class="{ 'show-clear-button': showClearButton && modelValue.length > 0 }"
         />
         <button
             class="clear"
@@ -83,11 +84,11 @@ function onPressEnterKey() {
     position: relative;
     display: flex;
     align-items: center;
-    gap: 0.4rem;
     border-radius: 5px;
     height: 3.2rem;
     width: 100%;
     min-height: 3.2rem;
+    gap: 0.4rem;
     background-color: var(--color-background);
     border: 1px solid var(--color-surface-alt);
     padding-right: 0.8rem;
@@ -108,7 +109,7 @@ function onPressEnterKey() {
         background-color: var(--color-surface);
         margin-right: 0.6rem;
         height: 100%;
-        border-right: 1px solid var(--color-urface-alt);
+        border-right: 1px solid var(--color-surface-alt);
         white-space: nowrap;
     }
 
@@ -120,8 +121,8 @@ function onPressEnterKey() {
 
     > input {
         display: block;
-        width: 100%;
         overflow: hidden;
+        width: 100%;
         height: 100%;
         background-color: transparent;
 
@@ -142,7 +143,6 @@ function onPressEnterKey() {
         font-size: 1.2rem;
         width: 2rem;
         height: 100%;
-        left: 0.4rem;
         display: none;
 
         &.show {

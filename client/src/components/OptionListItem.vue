@@ -1,8 +1,8 @@
 <template>
     <li class="option-list-item">
         <div>
-            <p>
-                <strong>{{ option.label }}</strong>
+            <p class="option-name">
+                {{ option.label }}
             </p>
             <div class="connected-node">
                 <span v-if="option.edge">
@@ -74,7 +74,8 @@ function onClickEditOption() {
 <style scoped lang="scss">
 .option-list-item {
     display: flex;
-    gap: 0.4rem;
+    align-items: flex-start;
+    gap: 1rem;
     padding: 1.2rem;
     cursor: unset;
 
@@ -83,6 +84,9 @@ function onClickEditOption() {
         flex-direction: column;
         flex: 1;
         gap: 0.4rem;
+        p.option-name {
+            font-weight: bold;
+        }
     }
 
     .connected-node {

@@ -1,5 +1,5 @@
 <template>
-    <ModalFrame>
+    <ModalFrame class="full-width">
         <template v-slot:header>
             <ModalHeader close-button>
                 <h2>{{ t('Modals.Edit-option.title') }}</h2>
@@ -17,6 +17,7 @@
                     <!-- Condition -->
                     <p v-html="t('Modals.Edit-option.Condition.instructions')"></p>
                     <div class="condition-inputs">
+                        <!-- Address -->
                         <div class="combo-box-details combo-box-details--address">
                             <ul class="suggestion-options">
                                 <li
@@ -36,6 +37,7 @@
                                 {{ t('Modals.Edit-option.Condition.address') }}
                             </ComboBox>
                         </div>
+                        <!-- Command -->
                         <div class="combo-box-details combo-box-details--command">
                             <ul class="suggestion-options">
                                 <li
@@ -65,6 +67,19 @@
                                     </div>
                                 </div>
                             </Transition>
+                        </div>
+                        <!-- Value -->
+                        <div class="combo-box-details combo-box-details--value">
+                            <ul class="suggestion-options">
+                                <li class="selected hidden">off</li>
+                            </ul>
+                            <ComboBox
+                                v-model="option.condition!.value"
+                                :options="[]"
+                                :placeholder="t('Modals.Edit-option.Condition.value-placeholder')"
+                            >
+                                {{ t('Modals.Edit-option.Condition.value') }}
+                            </ComboBox>
                         </div>
                     </div>
                 </Card>
@@ -138,11 +153,10 @@ const props = defineProps({
     }
 });
 
+const CONTROL_COMMANDS = COMMANDS_BY_DEVICE_TYPE['control'].map((cmd) => COMMANDS.find((c) => c.value === cmd)!);
 const PUSH_BUTTON_COMMANDS = COMMANDS_BY_DEVICE_TYPE['push-button'].map(
     (cmd) => COMMANDS.find((c) => c.value === cmd)!
 );
-
-const CONTROL_COMMANDS = COMMANDS_BY_DEVICE_TYPE['control'].map((cmd) => COMMANDS.find((c) => c.value === cmd)!);
 
 const projectStore = useProjectsStore();
 const project = projectStore.getProject(props.projectId);
@@ -246,11 +260,11 @@ function onClickRemoveOption() {
 <style scoped lang="scss">
 .edit-option {
     display: flex;
-    max-width: 92rem;
+    width: 100%;
+    height: 100%;
     flex-direction: column;
     gap: 1.6rem;
     justify-content: space-between;
-    height: 100%;
 }
 
 .condition-inputs {
@@ -281,6 +295,10 @@ function onClickRemoveOption() {
 
         // &--command {
         // }
+
+        &--value {
+            max-width: 16rem;
+        }
     }
 }
 

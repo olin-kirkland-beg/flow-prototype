@@ -99,7 +99,7 @@ export default class Project {
                     const connectedEdge: Edge | undefined = scene.edges.find((edge) => edge.sourceHandle === option.id);
                     // Generate an id that can be reproduced for the condition
                     const generatedConditionId = hashString(
-                        `${option.condition?.address}-${option.condition?.command}`
+                        `${option.condition?.address}-${option.condition?.command}-${option.condition?.value}`
                     );
 
                     // Add the condition to the conditionsMap

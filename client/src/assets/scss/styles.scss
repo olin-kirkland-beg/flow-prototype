@@ -58,6 +58,10 @@ pre {
     opacity: 0.5;
 }
 
+.hidden {
+    opacity: 0 !important;
+}
+
 .full-width {
     width: 100%;
 }
