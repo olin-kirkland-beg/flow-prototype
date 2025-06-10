@@ -35,6 +35,12 @@
             :selectedDialogue="selectedDialogue"
             @selectScene="selectScene"
             @selectDialogue="selectDialogueById"
+            :isConnected="isConnected"
+            :isConnecting="isConnecting"
+            :socketErrorMessage="socketErrorMessage"
+            :serverUrl="serverUrl"
+            :isFollowing="isFollowing"
+            :currentDialogueId="currentDialogueId"
         />
 
         <DialogueSidebar
@@ -67,7 +73,7 @@ import Scene from '@/scene';
 import { useProjectsStore } from '@/store/projects-store';
 import { Background } from '@vue-flow/background';
 import { Connection, ConnectionMode, Edge, NodeChange, useVueFlow, VueFlow, VueFlowStore } from '@vue-flow/core';
-import { ref, watch } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import DialogueSidebar from '../DialogueSidebar.vue';
 import ProjectSidebar from '../ProjectSidebar.vue';
@@ -86,6 +92,65 @@ const project = ref<Project | null>(projectsStore.getProject(projectId.value as 
 const selectedScene = ref<Scene | null>(null);
 const selectedDialogue = ref<Dialogue | null>(null);
 const seekingNodeId = ref<string | null>(null); // Used to track the node being dragged from
+
+// Manage live state changes from server
+let ws: WebSocket | null = null;
+const socketErrorMessage = ref<string | null>(null);
+const serverUrl = ref<string>('localhost'); // Default server URL
+const isConnected = ref<boolean>(false);
+const isConnecting = ref<boolean>(false);
+const isFollowing = ref<boolean>(false);
+const currentDialogueId = ref<string | null>(null);
+
+function connect() {
+    try {
+        ws = new WebSocket(`ws://${serverUrl.value}:3002`);
+        socketErrorMessage.value = null;
+        ws.onopen = () => {
+            isConnecting.value = false;
+            isConnected.value = true;
+        };
+
+        ws.onmessage = (event) => {
+            const { data } = JSON.parse(event.data);
+            if (!data) return console.warn('No data in event', event.data);
+            const { stateMachineId, newState } = data;
+            if (selectedScene.value?.remoteId !== stateMachineId) return;
+            currentDialogueId.value = newState;
+        };
+
+        ws.onerror = (e) => {
+            console.error('WebSocket error', e);
+            socketErrorMessage.value = 'Error: Cannot connect to server';
+            isConnecting.value = isConnected.value = false;
+            ws = null;
+        };
+
+        ws.onclose = () => {
+            isConnecting.value = isConnected.value = false;
+            ws = null;
+        };
+    } catch (e) {
+        socketErrorMessage.value = 'Error:' + e;
+        isConnecting.value = isConnected.value = false;
+        ws = null;
+    }
+}
+
+function disconnect() {
+    if (!ws) return console.log('Not connected');
+    ws.close();
+    ws = null;
+    isConnected.value = false;
+}
+
+onMounted(() => {
+    connect();
+});
+
+onUnmounted(() => {
+    disconnect();
+});
 
 // Initialize once the VueFlow instance is ready
 onPaneReady((vueFlowStore: VueFlowStore) => {

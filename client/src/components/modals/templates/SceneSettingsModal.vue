@@ -14,6 +14,9 @@
                     <InputGroup v-model="scene.description" :placeholder="t('Modals.Scene-settings.description')">
                         <span>{{ t('Modals.Scene-settings.description') }}</span>
                     </InputGroup>
+                    <InputGroup v-model="scene.remoteId" :placeholder="t('Modals.Scene-settings.remote-id')">
+                        <span>{{ t('Modals.Scene-settings.remote-id') }}</span>
+                    </InputGroup>
                 </section>
 
                 <section>

@@ -20,10 +20,8 @@ export default class TooltipController {
         this.subject.next(d);
     }
 
-    public static open(
-        tooltip: ComponentOptions<any>,
-        tooltipConfig?: any
-    ): void {
+    public static open(tooltip: ComponentOptions<any>, tooltipConfig?: any): void {
+        if (!tooltipConfig.html) return;
         this.getInstance().dispatch({
             tooltip,
             tooltipConfig

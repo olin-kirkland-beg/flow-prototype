@@ -2,11 +2,28 @@
     <!-- Left Sidebar -->
     <Panel class="sidebar sidebar--left">
         <section class="sidebar__project">
-            <div class="flex">
+            <div class="project-navigation">
                 <Button @click="router.push({ name: PageName.HOME })">
                     <i class="fas fa-chevron-left"></i>
                     <span>{{ t('Project.back-to-home') }}</span>
                 </Button>
+                <!-- Connection Status -->
+                <div
+                    class="flex connection-status"
+                    :class="{ success: isConnected, error: !isConnected && !isConnecting }"
+                    @mouseover="
+                        TooltipController.open(InfoTooltip, {
+                            html: tooltipMessage,
+                            target: $event.currentTarget,
+                            position: 'bottom'
+                        })
+                    "
+                >
+                    <i v-if="isConnected" class="fas fa-check"></i>
+                    <i v-else-if="isConnecting" class="fas fa-spinner fa-spin"></i>
+                    <i v-else class="fas fa-exclamation-triangle"></i>
+                    <i class="fas fa-plug"></i>
+                </div>
             </div>
             <div class="sidebar__header">
                 <h2>{{ project.name }}</h2>
@@ -83,11 +100,24 @@
                 </li>
             </List>
         </section>
+        <section v-if="isConnected">
+            <div class="sidebar__header">
+                <h2>{{ t('Project.current-dialogue-id') }}</h2>
+            </div>
+            <!-- TODO: Display the name of the current dialogue AND its ID
+            if the name isn't found show a warning text "dialogue not found" -->
+            <!-- TODO: Let users click the name and it will focus the dialogue in the scene -->
+            <!-- <Link>
+                {{ currentDialogueName }}
+            </Link> -->
+            <pre>{{ currentDialogueId }}</pre>
+        </section>
     </Panel>
 </template>
 
 <script setup lang="ts">
 import ModalController from '@/controllers/modal-controller';
+import TooltipController from '@/controllers/tooltip-controller';
 import Dialogue from '@/dialogue';
 import { t } from '@/i18n/locale';
 import Project from '@/project';
@@ -95,15 +125,28 @@ import { PageName, router } from '@/router';
 import Scene from '@/scene';
 import { useProjectsStore } from '@/store/projects-store';
 import { getUniqueName } from '@/utils/naming-util';
+import { computed, ref } from 'vue';
 import ProjectSettingsModal from './modals/templates/ProjectSettingsModal.vue';
 import SceneSettingsModal from './modals/templates/SceneSettingsModal.vue';
-import { ref } from 'vue';
+import InfoTooltip from './tooltips/templates/InfoTooltip.vue';
 
 const props = defineProps<{
     project: Project;
     selectedScene: Scene | null;
     selectedDialogue: Dialogue | null;
+    isConnected: boolean;
+    isConnecting: boolean;
+    socketErrorMessage: string | null;
+    serverUrl: string;
+    isFollowing: boolean;
+    currentDialogueId: string | null;
 }>();
+
+const tooltipMessage = computed(() => {
+    if (props.isConnected) return t('Project.connected', { serverUrl: props.serverUrl });
+    else if (props.socketErrorMessage) return props.socketErrorMessage || t('Project.connection-error');
+    return null;
+});
 
 const emit = defineEmits<{
     (e: 'selectScene', scene: Scene): void;
@@ -111,7 +154,6 @@ const emit = defineEmits<{
 }>();
 
 const projectsStore = useProjectsStore();
-const foo = ref('');
 
 function onClickOpenProjectSettings() {
     ModalController.open(ProjectSettingsModal, { project: props.project });
@@ -161,8 +203,16 @@ function onClickSelectDialogue(id: string) {
     overflow: hidden;
 }
 
+.project-navigation {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .sidebar__header {
     width: 100%;
+    height: 3.2rem;
     // border-bottom: 1px solid var(--color-surface-alt);
     // Background is a gradient light gray to transparent top to down
     background: linear-gradient(to bottom, var(--color-surface) 0%, transparent 100%);
@@ -198,6 +248,18 @@ section {
 .sidebar__edges {
     flex: 1;
     overflow: hidden;
+}
+
+.connection-status {
+    cursor: pointer;
+}
+
+.error * {
+    color: var(--color-danger);
+}
+
+.success * {
+    color: var(--color-primary);
 }
 
 :deep(ul.edges) {
